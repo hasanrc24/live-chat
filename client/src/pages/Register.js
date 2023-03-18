@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import { IoMdCloseCircle } from "react-icons/io";
 
 const Register = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const [imageUrl, setImageUrl] = useState(null);
   const fileInputRef = useRef(null);
 
@@ -20,10 +24,11 @@ const Register = () => {
       fileInputRef.current.click();
     }
   };
+  console.log(imageUrl);
 
   return (
     <div className="bg-brand-bg h-screen flex justify-center items-center">
-      <div className="bg-white rounded-xl p-8 ">
+      <div className="bg-white rounded-xl p-8 shadow-xl">
         <p className="text-2xl text-center mb-4 font-semibold">Live Chat</p>
         <form className="flex flex-col gap-2 my-4">
           {/* <label htmlFor="email">Email address</label> */}
@@ -31,6 +36,8 @@ const Register = () => {
             type="text"
             id="name"
             placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             className="p-3 border-b-2 border-brand/50 outline-none focus:border-brand/80"
             required
           />
@@ -38,6 +45,8 @@ const Register = () => {
             type="email"
             id="email"
             placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="p-3 border-b-2 border-brand/50 outline-none focus:border-brand/80"
             required
           />
@@ -46,6 +55,8 @@ const Register = () => {
             type="password"
             id="password"
             placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="p-3 border-b-2 border-brand/50 outline-none focus:border-brand/80"
             required
           />
@@ -87,7 +98,7 @@ const Register = () => {
           <input
             type="submit"
             value="Sign Up"
-            className=" mt-4 px-8 py-3 font-semibold cursor-pointer text-white bg-brand/90 rounded-lg m-auto"
+            className=" mt-4 px-8 py-2 font-semibold cursor-pointer text-white bg-brand/90 rounded-lg m-auto"
           />
         </form>
         <p>

@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   return (
     <div className="bg-brand-bg h-screen flex justify-center items-center">
-      <div className="bg-white rounded-xl p-8 ">
+      <div className="bg-white rounded-xl p-8 shadow-xl">
         <p className="text-2xl text-center mb-4 font-semibold">Live Chat</p>
         <form className="flex flex-col gap-2 my-4">
           {/* <label htmlFor="email">Email address</label> */}
@@ -13,6 +16,8 @@ const Login = () => {
             id="email"
             placeholder="Email"
             className="p-3 border-b-2 border-brand/50 outline-none focus:border-brand/80"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
           {/* <label htmlFor="password">Password</label> */}
@@ -20,6 +25,8 @@ const Login = () => {
             type="password"
             id="password"
             placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="p-3 border-b-2 border-brand/50 outline-none focus:border-brand/80"
             required
           />
