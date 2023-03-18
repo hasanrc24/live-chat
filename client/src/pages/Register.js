@@ -1,19 +1,25 @@
 import React, { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IoMdCloseCircle } from "react-icons/io";
+import axios from "axios";
 
 const Register = () => {
+  const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [picture, setPicture] = useState(null);
+  const [file, setFile] = useState(null);
 
   const [imageUrl, setImageUrl] = useState(null);
   const fileInputRef = useRef(null);
+  const navigate = useNavigate();
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
+  const handleFileChange = async (e) => {
+    setFile(e.target.files[0]);
+
     const reader = new FileReader();
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(e.target.files[0]);
     reader.onloadend = () => {
       setImageUrl(reader.result);
     };
@@ -24,13 +30,60 @@ const Register = () => {
       fileInputRef.current.click();
     }
   };
-  console.log(imageUrl);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", "live-chat");
+      formData.append("cloud_name", "dnqvwwxzv");
+      try {
+        const res = await fetch(
+          "https://api.cloudinary.com/v1_1/dnqvwwxzv/image/upload",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const picData = await res.json();
+        setPicture(picData.url.toString());
+        setLoading(false);
+
+        try {
+          const { data } = await axios.post(
+            "/api/user",
+            { name, email, password, picture: picData.url.toString() },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          localStorage.setItem("userInfo", JSON.stringify(data));
+          setLoading(false);
+          navigate("/");
+        } catch (error) {
+          setLoading(false);
+          console.log(error);
+        }
+      } catch (error) {
+        setLoading(false);
+        console.log(error);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="bg-brand-bg h-screen flex justify-center items-center">
       <div className="bg-white rounded-xl p-8 shadow-xl">
         <p className="text-2xl text-center mb-4 font-semibold">Live Chat</p>
-        <form className="flex flex-col gap-2 my-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-2 my-4">
           {/* <label htmlFor="email">Email address</label> */}
           <input
             type="text"
@@ -101,6 +154,7 @@ const Register = () => {
             className=" mt-4 px-8 py-2 font-semibold cursor-pointer text-white bg-brand/90 rounded-lg m-auto"
           />
         </form>
+        {loading && <span>Loading...</span>}
         <p>
           Don't have an account?{" "}
           <Link to="/login" className="text-blue-500">
