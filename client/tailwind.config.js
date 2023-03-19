@@ -6,6 +6,8 @@ module.exports = {
       colors: {
         brand: "#412b50",
         "brand-bg": "#f2f2ff",
+        "chat-bg": "#e2e5ed",
+        "chat-text": "#302e2e",
       },
     },
   },
