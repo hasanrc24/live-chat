@@ -1,4 +1,5 @@
 import React from "react";
+import { BiChevronDown } from "react-icons/bi";
 import { IoNotificationsSharp } from "react-icons/io5";
 
 const Header = () => {
@@ -9,12 +10,13 @@ const Header = () => {
         <div className="flex items-center cursor-pointer">
           <IoNotificationsSharp className="h-5 w-5" />
         </div>
-        <div className="cursor-pointer">
+        <div className="cursor-pointer flex items-center">
           <img
             src="https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
             alt="profile img"
             className="h-8 w-8 rounded-full"
           />
+          <BiChevronDown className="h-7 w-7" />
         </div>
       </div>
     </div>

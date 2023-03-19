@@ -19,7 +19,7 @@ const ChatLeft = () => {
         />
       </div>
 
-      <div className="flex gap-3 border-b items-center hover:bg-chat-bg -mr-3 px-3 py-2 cursor-pointer rounded-l-md">
+      <div className="flex gap-3 border-b items-center hover:bg-chat-bg md:-mr-3 px-3 py-2 cursor-pointer rounded-md md:rounded-none md:rounded-l-md">
         <div className="h-10 w-10 rounded-full overflow-hidden">
           <img
             src="https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
@@ -32,7 +32,7 @@ const ChatLeft = () => {
         </div>
       </div>
 
-      <div className="flex gap-3 items-center hover:bg-chat-bg -mr-3 px-3 py-2 cursor-pointer rounded-l-md">
+      <div className="flex gap-3 border-b items-center hover:bg-chat-bg md:-mr-3 px-3 py-2 cursor-pointer rounded-md md:rounded-none md:rounded-l-md">
         <div className="h-10 w-10 rounded-full overflow-hidden">
           <img
             src="https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
