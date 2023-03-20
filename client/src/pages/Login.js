@@ -1,12 +1,15 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addUserInfo } from "../redux/userSlice/userSlice";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,7 +26,7 @@ const Login = () => {
         }
       );
       localStorage.setItem("userInfo", JSON.stringify(data));
-      console.log(data);
+      dispatch(addUserInfo(data));
       setLoading(false);
       navigate("/");
     } catch (error) {
