@@ -1,7 +1,6 @@
 import React from "react";
 
 const Search = ({ searchData }) => {
-  console.log(searchData);
   return (
     <div>
       {searchData.map((user) => {

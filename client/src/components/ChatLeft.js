@@ -13,20 +13,19 @@ const ChatLeft = () => {
   const { user } = useSelector(userSelector);
 
   const fetchUsers = async (value) => {
-    const { data } = await axios.get(`/api/user?search=${searchValue}`, {
+    const { data } = await axios.get(`/api/user?search=${value}`, {
       headers: {
         Authorization: `Bearer ${user.token}`,
       },
     });
     setSearchData(data);
+    console.log("first");
   };
 
-  const handleSearch = (e) => {
-    debounce(setSearchValue(e.target.value), 300);
+  const handleSearch = debounce((e) => {
+    setSearchValue(e.target.value);
     fetchUsers(e.target.value);
-  };
-  // const debounceData = debounce(handleSearch, 300);
-  // console.log(debounceData);
+  }, 400);
   return (
     <div className="p-3">
       <div className="flex justify-between items-center border-b-2 pb-3">
@@ -45,7 +44,7 @@ const ChatLeft = () => {
           id="search_id"
           placeholder="Search..."
           className="bg-chat-bg w-full pl-1 pr-3 py-2 rounded-md outline-none"
-          value={searchValue}
+          // value={searchValue}
           onChange={handleSearch}
         />
       </div>
