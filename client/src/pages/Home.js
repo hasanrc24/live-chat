@@ -3,7 +3,7 @@ import ChatLeft from "../components/ChatLeft";
 import ChatRight from "../components/ChatRight";
 import Header from "../components/Header";
 import { useDispatch } from "react-redux";
-import { addUserInfo } from "../redux/userSlice/userSlice";
+import { addUserInfo } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {

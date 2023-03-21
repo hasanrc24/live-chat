@@ -1,12 +1,11 @@
 import React from "react";
-import { BiChevronDown } from "react-icons/bi";
 import { useSelector } from "react-redux";
-import { userSelector } from "../redux/userSlice/userSlice";
+import { userSelector } from "../redux/userSlice";
 import Modal from "./Modal";
 
 const ChatRight = () => {
   const { user } = useSelector(userSelector);
-  return <div className="p-3"></div>;
+  return <div className="p-3">Chat Right</div>;
 };
 
 export default ChatRight;

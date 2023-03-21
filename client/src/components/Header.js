@@ -3,7 +3,7 @@ import { BiChevronDown } from "react-icons/bi";
 import { IoNotificationsSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { addUserInfo, userSelector } from "../redux/userSlice/userSlice";
+import { addUserInfo, userSelector } from "../redux/userSlice";
 import Modal from "./Modal";
 
 const Header = () => {
