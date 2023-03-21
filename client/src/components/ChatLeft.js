@@ -1,7 +1,32 @@
-import React from "react";
-import { BiPlus } from "react-icons/bi";
+import React, { useState } from "react";
+import { BiPlus, BiSearchAlt2 } from "react-icons/bi";
+import axios from "axios";
+import { userSelector } from "../redux/userSlice/userSlice";
+import { useSelector } from "react-redux";
+import Search from "./Search";
+import debounce from "lodash.debounce";
 
 const ChatLeft = () => {
+  const [searchValue, setSearchValue] = useState("");
+  const [searchData, setSearchData] = useState([]);
+
+  const { user } = useSelector(userSelector);
+
+  const fetchUsers = async (value) => {
+    const { data } = await axios.get(`/api/user?search=${searchValue}`, {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    });
+    setSearchData(data);
+  };
+
+  const handleSearch = (e) => {
+    debounce(setSearchValue(e.target.value), 300);
+    fetchUsers(e.target.value);
+  };
+  // const debounceData = debounce(handleSearch, 300);
+  // console.log(debounceData);
   return (
     <div className="p-3">
       <div className="flex justify-between items-center border-b-2 pb-3">
@@ -11,13 +36,20 @@ const ChatLeft = () => {
           <BiPlus />
         </button>
       </div>
-      <div className="my-3">
+      <div className="my-3 flex items-center bg-chat-bg pl-2 rounded-md">
+        <label htmlFor="search_id">
+          <BiSearchAlt2 className="h-6 w-6 text-gray-500" />
+        </label>
         <input
           type="text"
+          id="search_id"
           placeholder="Search..."
-          className="bg-chat-bg w-full px-3 py-2 rounded-md outline-none"
+          className="bg-chat-bg w-full pl-1 pr-3 py-2 rounded-md outline-none"
+          value={searchValue}
+          onChange={handleSearch}
         />
       </div>
+      {searchValue.length > 0 && <Search searchData={searchData} />}
 
       <div className="hidden md:block">
         <div className="flex gap-3 border-b items-center hover:bg-chat-bg md:-mr-3 px-3 py-2 cursor-pointer rounded-md md:rounded-none md:rounded-l-md">

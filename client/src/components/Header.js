@@ -4,14 +4,15 @@ import { IoNotificationsSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addUserInfo, userSelector } from "../redux/userSlice/userSlice";
+import Modal from "./Modal";
 
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { user } = useSelector(userSelector);
-  console.log(user);
 
   const handleLogout = () => {
     dispatch(addUserInfo({}));
@@ -42,14 +43,20 @@ const Header = () => {
             />
             {showMenu && (
               <div className="absolute flex flex-col gap-2 right-0 top-11 py-2 px-3 text-white bg-brand z-50">
-                <p>Profile</p>
+                <p onClick={() => setOpenModal(true)}>Profile</p>
                 <p onClick={handleLogout}>Logout</p>
               </div>
             )}
+            {}
           </div>
         </div>
-
-        {/* asdlfhsdf */}
+        {openModal && (
+          <Modal
+            user={user}
+            setOpenModal={setOpenModal}
+            openModal={openModal}
+          />
+        )}
       </div>
     </div>
   );
