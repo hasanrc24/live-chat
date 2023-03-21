@@ -5,7 +5,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addUserInfo } from "../redux/userSlice/userSlice";
 
-const Header = ({ showMenu, setShowMenu }) => {
+const Header = () => {
+  const [showMenu, setShowMenu] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -22,11 +23,9 @@ const Header = ({ showMenu, setShowMenu }) => {
           <IoNotificationsSharp className="h-5 w-5" />
         </div>
         <div
-          // onBlur={() => setShowMenu(!showMenu)}
-          // onFocus={() => setShowMenu(!showMenu)}
           onClick={() => setShowMenu(!showMenu)}
           tabIndex="0"
-          className="cursor-pointer flex items-center  transition-all"
+          className="cursor-pointer flex items-center transition-all"
         >
           <img
             src="https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
@@ -34,7 +33,11 @@ const Header = ({ showMenu, setShowMenu }) => {
             className="h-8 w-8 rounded-full"
           />
           <div className="relative">
-            <BiChevronDown className="h-7 w-7" />
+            <BiChevronDown
+              className={`h-7 w-7 transition-all ${
+                showMenu ? "rotate-180" : ""
+              }`}
+            />
             {showMenu && (
               <div className="absolute flex flex-col gap-2 right-0 top-11 py-2 px-3 text-white bg-brand z-50">
                 <p>Profile</p>

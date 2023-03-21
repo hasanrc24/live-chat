@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
     if (localStorage.getItem("userInfo")) {
@@ -20,13 +19,10 @@ const Home = () => {
     }
   }, []);
   return (
-    <div
-      // onClick={() => setShowMenu(false)}
-      className="bg-brand-bg h-screen flex justify-center items-center"
-    >
-      <div className="h-[80%] w-[70%] bg-white rounded-xl shadow-xl overflow-hidden">
-        <Header setShowMenu={setShowMenu} showMenu={showMenu} />
-        <div className="grid md:grid-cols-3 sm:grid-col-1 h-full">
+    <div className="bg-brand-bg h-screen flex justify-center items-center">
+      <div className="h-[90%] w-[90%] md:h-[80%] md:w-[70%] bg-white rounded-xl shadow-xl overflow-hidden">
+        <Header />
+        <div className="grid md:grid-cols-3 sm:grid-col-2 h-full">
           <div className="border-r-2 h-0 md:h-full">
             <ChatLeft />
           </div>

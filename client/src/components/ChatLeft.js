@@ -19,29 +19,31 @@ const ChatLeft = () => {
         />
       </div>
 
-      <div className="flex gap-3 border-b items-center hover:bg-chat-bg md:-mr-3 px-3 py-2 cursor-pointer rounded-md md:rounded-none md:rounded-l-md">
-        <div className="h-10 w-10 rounded-full overflow-hidden">
-          <img
-            src="https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
-            alt="prof-img"
-          />
+      <div className="hidden md:block">
+        <div className="flex gap-3 border-b items-center hover:bg-chat-bg md:-mr-3 px-3 py-2 cursor-pointer rounded-md md:rounded-none md:rounded-l-md">
+          <div className="h-10 w-10 rounded-full overflow-hidden">
+            <img
+              src="https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
+              alt="prof-img"
+            />
+          </div>
+          <div className="text-chat-text">
+            <p className="font-semibold">Adam Hills</p>
+            <p className="text-sm">Hello there how are you?</p>
+          </div>
         </div>
-        <div className="text-chat-text">
-          <p className="font-semibold">Adam Hills</p>
-          <p className="text-sm">Hello there how are you?</p>
-        </div>
-      </div>
 
-      <div className="flex gap-3 border-b items-center hover:bg-chat-bg md:-mr-3 px-3 py-2 cursor-pointer rounded-md md:rounded-none md:rounded-l-md">
-        <div className="h-10 w-10 rounded-full overflow-hidden">
-          <img
-            src="https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
-            alt="prof-img"
-          />
-        </div>
-        <div className="text-chat-text">
-          <p className="font-semibold">Adam Hills</p>
-          <p className="text-sm">Hello there how are you?</p>
+        <div className="flex gap-3 border-b items-center hover:bg-chat-bg md:-mr-3 px-3 py-2 cursor-pointer rounded-md md:rounded-none md:rounded-l-md">
+          <div className="h-10 w-10 rounded-full overflow-hidden">
+            <img
+              src="https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
+              alt="prof-img"
+            />
+          </div>
+          <div className="text-chat-text">
+            <p className="font-semibold">Adam Hills</p>
+            <p className="text-sm">Hello there how are you?</p>
+          </div>
         </div>
       </div>
     </div>
