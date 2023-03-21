@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import { IoNotificationsSharp } from "react-icons/io5";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { addUserInfo } from "../redux/userSlice/userSlice";
+import { addUserInfo, userSelector } from "../redux/userSlice/userSlice";
 
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { user } = useSelector(userSelector);
+  console.log(user);
 
   const handleLogout = () => {
     dispatch(addUserInfo({}));
@@ -24,11 +27,10 @@ const Header = () => {
         </div>
         <div
           onClick={() => setShowMenu(!showMenu)}
-          tabIndex="0"
           className="cursor-pointer flex items-center transition-all"
         >
           <img
-            src="https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
+            src={user.picture}
             alt="profile img"
             className="h-8 w-8 rounded-full"
           />
@@ -46,6 +48,8 @@ const Header = () => {
             )}
           </div>
         </div>
+
+        {/* asdlfhsdf */}
       </div>
     </div>
   );
