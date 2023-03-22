@@ -20,7 +20,6 @@ const ChatLeft = () => {
   const dispatch = useDispatch();
   const { user } = useSelector(userSelector);
   const { chats } = useSelector(chatSelector);
-  console.log(user);
 
   const fetchUsers = async (value) => {
     try {
@@ -70,7 +69,6 @@ const ChatLeft = () => {
       });
       setAllChats(data);
       dispatch(dispatchChats(data));
-      // console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -86,10 +84,7 @@ const ChatLeft = () => {
     <div className="p-3">
       <div className="flex justify-between items-center border-b-2 pb-3">
         <p className="font-semibold text-lg">My Chats</p>
-        <button
-          // onClick={fetchChats}
-          className="flex items-center gap-1 bg-brand/70 rounded px-2 py-1 text-white"
-        >
+        <button className="flex items-center gap-1 bg-brand/70 rounded px-2 py-1 text-white">
           <p>Group chat</p>
           <BiPlus />
         </button>
@@ -119,7 +114,7 @@ const ChatLeft = () => {
           );
         })
       ) : (
-        <div className=" box-border ">
+        <div className=" box-border container-snap">
           {allChats?.map((chat) => {
             return <MyChats key={chat._id} chat={chat} />;
           })}
