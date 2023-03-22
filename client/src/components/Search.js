@@ -1,10 +1,10 @@
 import React from "react";
 
-const Search = ({ user, accessChat, setSearchValue }) => {
+const Search = ({ user, handleFunction, setSearchValue }) => {
   return (
     <div
       onClick={() => {
-        accessChat();
+        handleFunction();
         setSearchValue("");
       }}
       className="flex gap-3 my-1 bg-brand-bg px-4 py-3 rounded-md cursor-pointer hover:bg-brand hover:text-white transition-all"

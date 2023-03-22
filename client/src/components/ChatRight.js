@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { userSelector } from "../redux/userSlice";
-import Modal from "./Modal";
+import Modal from "./Modals/Modal";
 
 const ChatRight = () => {
   const { user } = useSelector(userSelector);
