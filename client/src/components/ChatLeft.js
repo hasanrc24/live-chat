@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { BiPlus, BiSearchAlt2 } from "react-icons/bi";
 import axios from "axios";
 import { userSelector } from "../redux/userSlice";
@@ -26,24 +26,33 @@ const ChatLeft = () => {
   const dispatch = useDispatch();
   const { user } = useSelector(userSelector);
   const { chats } = useSelector(chatSelector);
+  const localUser = JSON.parse(localStorage.getItem("userInfo"));
 
-  const fetchUsers = async (value) => {
-    try {
-      const { data } = await axios.get(`/api/user?search=${value}`, {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
-      setSearchData(data);
-    } catch (error) {
-      notifyError(error.response.data);
-    }
-  };
+  const fetchUsers = useCallback(
+    debounce(async (value) => {
+      try {
+        const { data } = await axios.get(`/api/user?search=${value}`, {
+          headers: {
+            Authorization: `Bearer ${localUser.token}`,
+          },
+        });
+        setSearchData(data);
+      } catch (error) {
+        console.log(error);
+        notifyError(
+          error.response.data.message
+            ? error.response.data.message
+            : error.response.data
+        );
+      }
+    }, 200),
+    []
+  );
 
-  const handleSearch = debounce((e) => {
+  const handleSearch = (e) => {
     setSearchValue(e.target.value);
     fetchUsers(e.target.value);
-  }, 300);
+  };
 
   const accessChat = async (userId) => {
     try {
@@ -57,15 +66,17 @@ const ChatLeft = () => {
           },
         }
       );
+      setSearchValue("");
       if (!chats.find((c) => c._id === data.id)) {
         dispatch(dispatchSelectedChat(data));
         dispatch(dispatchChats([...chats, data]));
+        setAllChats([data, ...chats]);
       }
     } catch (error) {
+      console.log(error);
       notifyError(error.response.data);
     }
   };
-
   const fetchChats = async (token) => {
     try {
       const { data } = await axios.get("/api/chat", {
@@ -108,7 +119,7 @@ const ChatLeft = () => {
             id="search_id"
             placeholder="Search..."
             className="bg-chat-bg w-full pl-1 pr-3 py-2 rounded-md outline-none"
-            // value={searchValue}
+            value={searchValue}
             onChange={handleSearch}
           />
         </div>
