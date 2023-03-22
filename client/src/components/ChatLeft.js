@@ -12,12 +12,16 @@ import {
 } from "../redux/chatSlice";
 import MyChats from "./MyChats";
 import GroupChatModal from "./Modals/GroupChatModal";
+import toast, { Toaster } from "react-hot-toast";
 
 const ChatLeft = () => {
   const [searchValue, setSearchValue] = useState("");
   const [searchData, setSearchData] = useState([]);
   const [allChats, setAllChats] = useState([]);
   const [openGroupModal, setOpenGroupModal] = useState(false);
+
+  const notifyError = (msg) => toast.error(msg);
+  const notifySuccess = (msg) => toast.success(msg);
 
   const dispatch = useDispatch();
   const { user } = useSelector(userSelector);
@@ -32,7 +36,7 @@ const ChatLeft = () => {
       });
       setSearchData(data);
     } catch (error) {
-      console.log(error);
+      notifyError(error.response.data);
     }
   };
 
@@ -58,7 +62,7 @@ const ChatLeft = () => {
         dispatch(dispatchChats([...chats, data]));
       }
     } catch (error) {
-      console.log(error);
+      notifyError(error.response.data);
     }
   };
 
@@ -83,55 +87,61 @@ const ChatLeft = () => {
     }
   }, []);
   return (
-    <div className="p-3">
-      <div className="flex justify-between items-center border-b-2 pb-3">
-        <p className="font-semibold text-lg">My Chats</p>
-        <button
-          onClick={() => setOpenGroupModal(true)}
-          className="flex items-center gap-1 bg-brand/70 rounded px-2 py-1 text-white"
-        >
-          <p>Group chat</p>
-          <BiPlus />
-        </button>
-      </div>
-      <div className="my-3 flex items-center bg-chat-bg pl-2 rounded-md">
-        <label htmlFor="search_id">
-          <BiSearchAlt2 className="h-6 w-6 text-gray-500" />
-        </label>
-        <input
-          type="text"
-          id="search_id"
-          placeholder="Search..."
-          className="bg-chat-bg w-full pl-1 pr-3 py-2 rounded-md outline-none"
-          // value={searchValue}
-          onChange={handleSearch}
-        />
-      </div>
-      {searchValue.length > 0 ? (
-        searchData?.map((user) => {
-          return (
-            <Search
-              setSearchValue={setSearchValue}
-              key={user._id}
-              user={user}
-              handleFunction={() => accessChat(user._id)}
-            />
-          );
-        })
-      ) : (
-        <div className=" box-border container-snap">
-          {allChats?.map((chat) => {
-            return <MyChats key={chat._id} chat={chat} />;
-          })}
+    <>
+      <div className="p-3">
+        <div className="flex justify-between items-center border-b-2 pb-3">
+          <p className="font-semibold text-lg">My Chats</p>
+          <button
+            onClick={() => setOpenGroupModal(true)}
+            className="flex items-center gap-1 bg-brand/70 rounded px-2 py-1 text-white"
+          >
+            <p>Group chat</p>
+            <BiPlus />
+          </button>
         </div>
-      )}
-      {openGroupModal && (
-        <GroupChatModal
-          openGroupModal={openGroupModal}
-          setOpenGroupModal={setOpenGroupModal}
-        />
-      )}
-    </div>
+        <div className="my-3 flex items-center bg-chat-bg pl-2 rounded-md">
+          <label htmlFor="search_id">
+            <BiSearchAlt2 className="h-6 w-6 text-gray-500" />
+          </label>
+          <input
+            type="text"
+            id="search_id"
+            placeholder="Search..."
+            className="bg-chat-bg w-full pl-1 pr-3 py-2 rounded-md outline-none"
+            // value={searchValue}
+            onChange={handleSearch}
+          />
+        </div>
+        {searchValue.length > 0 ? (
+          searchData?.map((user) => {
+            return (
+              <Search
+                setSearchValue={setSearchValue}
+                key={user._id}
+                user={user}
+                handleFunction={() => accessChat(user._id)}
+              />
+            );
+          })
+        ) : (
+          <div className=" box-border container-snap">
+            {allChats?.map((chat) => {
+              return <MyChats key={chat._id} chat={chat} />;
+            })}
+          </div>
+        )}
+        {openGroupModal && (
+          <GroupChatModal
+            openGroupModal={openGroupModal}
+            setOpenGroupModal={setOpenGroupModal}
+            notifyError={notifyError}
+            notifySuccess={notifySuccess}
+          />
+        )}
+      </div>
+
+      <Toaster position="top-center" reverseOrder={false} />
+    </>
   );
 };
 

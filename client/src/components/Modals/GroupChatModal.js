@@ -2,19 +2,28 @@ import axios from "axios";
 import React, { useState } from "react";
 import { createPortal } from "react-dom";
 import { IoCloseOutline } from "react-icons/io5";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { userSelector } from "../../redux/userSlice";
 import Search from "../Search";
 import SelectedBadge from "../SelectedBadge";
+import { chatSelector, dispatchChats } from "../../redux/chatSlice";
 
-const GroupChatModal = ({ openGroupModal, setOpenGroupModal }) => {
-  const [groupChatName, setGroupChatName] = useState();
+const GroupChatModal = ({
+  openGroupModal,
+  setOpenGroupModal,
+  notifySuccess,
+  notifyError,
+}) => {
+  const [groupChatName, setGroupChatName] = useState("");
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const dispatch = useDispatch();
+
   const { user } = useSelector(userSelector);
+  const { chats } = useSelector(chatSelector);
 
   const handleSearch = async (query) => {
     setLoading(true);
@@ -34,6 +43,7 @@ const GroupChatModal = ({ openGroupModal, setOpenGroupModal }) => {
     } catch (error) {
       console.log(error);
       setLoading(false);
+      notifyError("Some error occured.");
     }
   };
 
@@ -52,7 +62,40 @@ const GroupChatModal = ({ openGroupModal, setOpenGroupModal }) => {
     setSelectedUsers(selectedUsers.filter((user) => user._id !== userId));
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!groupChatName) {
+      notifyError("Group chat must have a name!");
+      return;
+    }
+    if (selectedUsers.length === 0) {
+      notifyError("Group chat must have users!");
+      return;
+    }
+
+    try {
+      const res = await axios.post(
+        "/api/chat/group",
+        {
+          name: groupChatName,
+          users: JSON.stringify(selectedUsers.map((us) => us._id)),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      if (res.status === 200) {
+        dispatch(dispatchChats([res.data, ...chats]));
+        notifySuccess("Chat created successfully!");
+        setOpenGroupModal(false);
+      }
+    } catch (error) {
+      notifyError(error.response.data);
+    }
+  };
 
   return createPortal(
     <>
@@ -77,6 +120,8 @@ const GroupChatModal = ({ openGroupModal, setOpenGroupModal }) => {
           >
             <input
               type="text"
+              value={groupChatName}
+              onChange={(e) => setGroupChatName(e.target.value)}
               className="border-b-2 mb-3 border-brand/50 focus:border-brand outline-none px-2 py-2 w-[70%]"
               placeholder="Group Chat Name"
             />
