@@ -19,6 +19,7 @@ const Header = ({ openModal, setOpenModal }) => {
 
   const handleLogout = () => {
     dispatch(addUserInfo({}));
+    dispatch(dispatchSelectedChat({}));
     localStorage.removeItem("userInfo");
     navigate("/login");
   };
@@ -32,7 +33,7 @@ const Header = ({ openModal, setOpenModal }) => {
       >
         {!toggle && <HiArrowSmLeft className="h-7 w-7" />}
       </div>
-      <p className="font-semibold text-center md:text-left w-1/3 md:w-full">
+      <p className="font-semibold text-lg text-center md:text-left w-1/3 md:w-full">
         Live Chat
       </p>
       <div className="font-semibold flex gap-3 w-1/3 md:w-full justify-end">

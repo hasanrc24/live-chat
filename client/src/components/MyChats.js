@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getSender } from "../config/config";
 import { chatSelector, dispatchSelectedChat } from "../redux/chatSlice";
 import { toggleRight } from "../redux/toggleSlice";
 import { userSelector } from "../redux/userSlice";
 
-const MyChats = ({ chat }) => {
+const MyChats = ({ chat, setReRender, reRender }) => {
   const dispatch = useDispatch();
   const { selectedChat } = useSelector(chatSelector);
   const { user } = useSelector(userSelector);
@@ -14,6 +14,9 @@ const MyChats = ({ chat }) => {
     dispatch(toggleRight());
     dispatch(dispatchSelectedChat(chat));
   };
+  useEffect(() => {
+    console.log("mychats");
+  }, []);
   return (
     <div
       onClick={handleSelectChat}

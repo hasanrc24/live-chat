@@ -3,11 +3,14 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addUserInfo } from "../redux/userSlice";
+import { toast, Toaster } from "react-hot-toast";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const notifyError = (msg) => toast.error(msg);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -30,7 +33,13 @@ const Login = () => {
       setLoading(false);
       navigate("/");
     } catch (error) {
+      setLoading(false);
       console.log(error);
+      notifyError(
+        error.response.data.message
+          ? error.response.data.message
+          : error.response.statusText
+      );
     }
   };
   return (
@@ -75,6 +84,7 @@ const Login = () => {
           </Link>
         </p>
       </div>
+      <Toaster position="top-center" reverseOrder={false} />
     </div>
   );
 };

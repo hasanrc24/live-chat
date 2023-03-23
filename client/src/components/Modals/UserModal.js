@@ -1,17 +1,21 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { IoCloseOutline } from "react-icons/io5";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getSender } from "../../config/config";
 import { userSelector } from "../../redux/userSlice";
 import SelectedBadge from "../SelectedBadge";
 import axios from "axios";
 import debounce from "lodash.debounce";
 import Search from "../Search";
+import {
+  chatSelector,
+  dispatchChats,
+  dispatchSelectedChat,
+} from "../../redux/chatSlice";
 
 const UserModal = ({
   setOpenModal,
-  selectedChat,
   notifyError,
   notifySuccess,
   setReRender,
@@ -21,9 +25,11 @@ const UserModal = ({
   const [chatName, setChatName] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [searchData, setSearchData] = useState([]);
-  const [rn, setRn] = useState(false);
 
   const { user } = useSelector(userSelector);
+  const { selectedChat, chats } = useSelector(chatSelector);
+
+  const dispatch = useDispatch();
 
   const handleRename = async () => {
     setLoading(true);
@@ -48,8 +54,11 @@ const UserModal = ({
       if (res.status === 200) {
         setLoading(false);
         setReRender(!reRender);
+        dispatch(dispatchSelectedChat(res.data));
+        const temp = chats?.filter((ch) => selectedChat._id !== ch._id);
+        dispatch(dispatchChats([res.data, ...temp]));
         notifySuccess("Group chat renamed successfully.");
-        setOpenModal(false);
+        setChatName("");
       }
     } catch (error) {
       setLoading(false);
@@ -59,8 +68,12 @@ const UserModal = ({
   };
 
   const handleRemoveUser = async (userId) => {
-    setLoading(true);
+    if (selectedChat.groupAdmin._id !== user._id && userId !== user._id) {
+      notifyError("Only admin can remove user.");
+      return;
+    }
     try {
+      setLoading(true);
       const res = await axios.put(
         "/api/chat/removeFromGroup",
         {
@@ -75,8 +88,16 @@ const UserModal = ({
       );
       if (res.status === 200) {
         setLoading(false);
-        setRn(!rn);
-        notifySuccess("User removed");
+        if (user._id === userId) {
+          dispatch(dispatchSelectedChat({}));
+          const temp = chats?.filter((ch) => ch._id !== res.data._id);
+          dispatch(dispatchChats(temp));
+          notifySuccess("Left from group!");
+          setReRender(!reRender);
+        } else {
+          dispatch(dispatchSelectedChat(res.data));
+          notifySuccess("User removed");
+        }
       }
     } catch (error) {
       setLoading(false);
@@ -85,11 +106,19 @@ const UserModal = ({
     }
   };
 
-  const accessChat = async (userId) => {
+  const accessChat = async (userDt) => {
+    if (selectedChat.users.find((us) => us._id === userDt._id)) {
+      notifyError("User already added.");
+      return;
+    }
+    if (selectedChat.groupAdmin._id !== user._id) {
+      notifyError("Only admin can add user.");
+      return;
+    }
     try {
       const res = await axios.put(
         "/api/chat/addToGroup",
-        { chatId: selectedChat._id, userId },
+        { chatId: selectedChat._id, userId: userDt._id },
         {
           headers: {
             "Content-Type": "application/json",
@@ -98,6 +127,7 @@ const UserModal = ({
         }
       );
       if (res.status === 200) {
+        dispatch(dispatchSelectedChat(res.data));
         notifySuccess("User added to group.");
         setSearchInput("");
       }
@@ -155,6 +185,9 @@ const UserModal = ({
         setLoading(false);
         setReRender(!reRender);
         setOpenModal(false);
+        dispatch(dispatchSelectedChat({}));
+        const temp = chats?.filter((ch) => ch._id !== res.data._id);
+        dispatch(dispatchChats(temp));
         notifySuccess("Left from group!");
       }
     } catch (error) {
@@ -163,10 +196,6 @@ const UserModal = ({
       notifyError("Some error occured.");
     }
   };
-
-  useEffect(() => {
-    console.log("rendered from modal");
-  }, [rn, reRender]);
 
   return createPortal(
     <>
@@ -201,6 +230,10 @@ const UserModal = ({
         ) : (
           <div className="m-auto text-center mx-4">
             <h2 className="text-3xl font-semibold">{selectedChat.chatName}</h2>
+            <p>
+              <span className="font-semibold">Admin: </span>
+              {selectedChat.groupAdmin.name}
+            </p>
             <div className="flex flex-wrap gap-1 justify-center my-4">
               {selectedChat?.users.map((user) => {
                 return (

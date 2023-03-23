@@ -27,8 +27,6 @@ const ChatRight = ({
           <RightHeader
             openModal={chatOptionModal}
             setOpenModal={setChatOptionModal}
-            selectedChat={selectedChat}
-            user={user}
             notifyError={notifyError}
             notifySuccess={notifySuccess}
             setReRender={setReRender}

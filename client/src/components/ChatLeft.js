@@ -22,7 +22,7 @@ const ChatLeft = ({ notifyError, notifySuccess, setReRender, reRender }) => {
 
   const dispatch = useDispatch();
   const { user } = useSelector(userSelector);
-  const { chats } = useSelector(chatSelector);
+  const { chats, selectedChat } = useSelector(chatSelector);
   const localUser = JSON.parse(localStorage.getItem("userInfo"));
 
   const fetchUsers = useCallback(
@@ -92,11 +92,14 @@ const ChatLeft = ({ notifyError, notifySuccess, setReRender, reRender }) => {
   };
 
   useEffect(() => {
-    console.log("render from left");
     if (localStorage.getItem("userInfo")) {
       const info = JSON.parse(localStorage.getItem("userInfo"));
       fetchChats(info.token);
     }
+  }, []);
+
+  useEffect(() => {
+    console.log("render from left");
   }, [reRender]);
   return (
     <>
@@ -137,12 +140,19 @@ const ChatLeft = ({ notifyError, notifySuccess, setReRender, reRender }) => {
           })
         ) : (
           <div className=" box-border container-snap">
-            {allChats.length > 0 ? (
+            {chats?.length > 0 ? (
               loading ? (
                 <p>Loading...</p>
               ) : (
-                allChats?.map((chat) => {
-                  return <MyChats key={chat._id} chat={chat} />;
+                chats?.map((chat) => {
+                  return (
+                    <MyChats
+                      key={chat._id}
+                      chat={chat}
+                      setReRender={setReRender}
+                      reRender={reRender}
+                    />
+                  );
                 })
               )
             ) : (
