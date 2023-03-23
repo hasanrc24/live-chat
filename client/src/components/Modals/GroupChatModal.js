@@ -13,6 +13,7 @@ const GroupChatModal = ({
   setOpenGroupModal,
   notifySuccess,
   notifyError,
+  setAllChats,
 }) => {
   const [groupChatName, setGroupChatName] = useState("");
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -88,6 +89,7 @@ const GroupChatModal = ({
         }
       );
       if (res.status === 200) {
+        setAllChats([res.data, ...chats]);
         dispatch(dispatchChats([res.data, ...chats]));
         notifySuccess("Chat created successfully!");
         setOpenGroupModal(false);

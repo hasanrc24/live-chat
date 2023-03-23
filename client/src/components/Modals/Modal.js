@@ -2,7 +2,7 @@ import React from "react";
 import { createPortal } from "react-dom";
 import { IoCloseOutline } from "react-icons/io5";
 
-const Modal = ({ openModal, setOpenModal, user }) => {
+const Modal = ({ setOpenModal, user }) => {
   return createPortal(
     <>
       <div

@@ -11,6 +11,8 @@ const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [openModal, setOpenModal] = useState(false);
+
   const { toggle } = useSelector(toggleSelector);
 
   useEffect(() => {
@@ -24,8 +26,8 @@ const Home = () => {
   return (
     <div className="bg-brand-bg h-screen flex justify-center items-center">
       <div className="h-[90%] w-[90%] md:h-[80%] md:w-[70%] bg-white rounded-xl shadow-xl overflow-hidden">
-        <Header />
-        <div className="grid md:grid-cols-3 sm:grid-col-2 h-full">
+        <Header openModal={openModal} setOpenModal={setOpenModal} />
+        <div className="grid md:grid-cols-3 sm:grid-col-2 h-full -mt-16 pt-16">
           <div
             className={`${
               toggle ? "block" : "hidden"

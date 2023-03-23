@@ -147,6 +147,7 @@ const ChatLeft = () => {
             setOpenGroupModal={setOpenGroupModal}
             notifyError={notifyError}
             notifySuccess={notifySuccess}
+            setAllChats={setAllChats}
           />
         )}
       </div>

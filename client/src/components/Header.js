@@ -7,10 +7,10 @@ import { addUserInfo, userSelector } from "../redux/userSlice";
 import Modal from "./Modals/Modal";
 import { HiArrowSmLeft } from "react-icons/hi";
 import { toggleLeft, toggleSelector } from "../redux/toggleSlice";
+import { chatSelector, dispatchSelectedChat } from "../redux/chatSlice";
 
-const Header = () => {
+const Header = ({ openModal, setOpenModal }) => {
   const [showMenu, setShowMenu] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -25,7 +25,9 @@ const Header = () => {
   return (
     <div className="bg-brand text-white p-4 flex justify-between items-center">
       <div
-        onClick={() => dispatch(toggleLeft())}
+        onClick={() =>
+          dispatch(toggleLeft(), dispatch(dispatchSelectedChat({})))
+        }
         className="block md:hidden w-1/3 md:w-full cursor-pointer"
       >
         {!toggle && <HiArrowSmLeft className="h-7 w-7" />}
