@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { getSender } from "../../config/config";
 import { SlOptions } from "react-icons/sl";
 import UserModal from "../Modals/UserModal";
 
-const RightHeader = ({ openModal, setOpenModal, selectedChat, user }) => {
+const RightHeader = ({
+  openModal,
+  setOpenModal,
+  selectedChat,
+  user,
+  notifyError,
+  notifySuccess,
+  setReRender,
+  reRender,
+}) => {
   return (
     <div className="flex justify-between items-center px-3 py-2">
       <div className="flex gap-2">
@@ -29,7 +38,14 @@ const RightHeader = ({ openModal, setOpenModal, selectedChat, user }) => {
         <SlOptions className="h-5 w-5" />
       </div>
       {openModal && (
-        <UserModal setOpenModal={setOpenModal} selectedChat={selectedChat} />
+        <UserModal
+          setOpenModal={setOpenModal}
+          selectedChat={selectedChat}
+          notifyError={notifyError}
+          notifySuccess={notifySuccess}
+          setReRender={setReRender}
+          reRender={reRender}
+        />
       )}
     </div>
   );

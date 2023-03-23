@@ -6,16 +6,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { addUserInfo } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
 import { toggleSelector } from "../redux/toggleSlice";
+import { toast, Toaster } from "react-hot-toast";
 
 const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const notifyError = (msg) => toast.error(msg);
+  const notifySuccess = (msg) => toast.success(msg);
+
+  const [reRender, setReRender] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [chatOptionModal, setChatOptionModal] = useState(false);
 
   const { toggle } = useSelector(toggleSelector);
 
   useEffect(() => {
+    console.log("Render");
     if (localStorage.getItem("userInfo")) {
       const info = JSON.parse(localStorage.getItem("userInfo"));
       dispatch(addUserInfo(info));
@@ -33,15 +40,29 @@ const Home = () => {
               toggle ? "block" : "hidden"
             } md:block border-r-2 h-0 md:h-full`}
           >
-            <ChatLeft />
+            <ChatLeft
+              notifyError={notifyError}
+              notifySuccess={notifySuccess}
+              setReRender={setReRender}
+              reRender={reRender}
+            />
           </div>
           <div
             className={`${toggle ? "hidden" : "block"} md:block md:col-span-2`}
           >
-            <ChatRight />
+            <ChatRight
+              notifyError={notifyError}
+              notifySuccess={notifySuccess}
+              chatOptionModal={chatOptionModal}
+              setChatOptionModal={setChatOptionModal}
+              setReRender={setReRender}
+              reRender={reRender}
+            />
           </div>
         </div>
       </div>
+
+      <Toaster position="top-center" reverseOrder={false} />
     </div>
   );
 };

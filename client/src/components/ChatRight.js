@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { chatSelector } from "../redux/chatSlice";
 import { userSelector } from "../redux/userSlice";
@@ -6,12 +6,20 @@ import ChatBox from "./ChatRight/ChatBox";
 import RightHeader from "./ChatRight/RightHeader";
 import Modal from "./Modals/Modal";
 
-const ChatRight = () => {
-  const [chatOptionModal, setChatOptionModal] = useState(false);
-
+const ChatRight = ({
+  notifyError,
+  notifySuccess,
+  chatOptionModal,
+  setChatOptionModal,
+  setReRender,
+  reRender,
+}) => {
   const { user } = useSelector(userSelector);
   const { selectedChat } = useSelector(chatSelector);
 
+  useEffect(() => {
+    console.log("Render from right");
+  }, [reRender]);
   return (
     <div className="h-full">
       {Object.keys(selectedChat).length !== 0 ? (
@@ -21,6 +29,10 @@ const ChatRight = () => {
             setOpenModal={setChatOptionModal}
             selectedChat={selectedChat}
             user={user}
+            notifyError={notifyError}
+            notifySuccess={notifySuccess}
+            setReRender={setReRender}
+            reRender={reRender}
           />
           <ChatBox />
         </>

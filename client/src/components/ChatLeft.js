@@ -12,16 +12,13 @@ import {
 } from "../redux/chatSlice";
 import MyChats from "./MyChats";
 import GroupChatModal from "./Modals/GroupChatModal";
-import toast, { Toaster } from "react-hot-toast";
 
-const ChatLeft = () => {
+const ChatLeft = ({ notifyError, notifySuccess, setReRender, reRender }) => {
   const [searchValue, setSearchValue] = useState("");
   const [searchData, setSearchData] = useState([]);
   const [allChats, setAllChats] = useState([]);
   const [openGroupModal, setOpenGroupModal] = useState(false);
-
-  const notifyError = (msg) => toast.error(msg);
-  const notifySuccess = (msg) => toast.success(msg);
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
   const { user } = useSelector(userSelector);
@@ -78,25 +75,29 @@ const ChatLeft = () => {
     }
   };
   const fetchChats = async (token) => {
+    setLoading(true);
     try {
       const { data } = await axios.get("/api/chat", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+      setLoading(false);
       setAllChats(data);
       dispatch(dispatchChats(data));
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
 
   useEffect(() => {
+    console.log("render from left");
     if (localStorage.getItem("userInfo")) {
       const info = JSON.parse(localStorage.getItem("userInfo"));
       fetchChats(info.token);
     }
-  }, []);
+  }, [reRender]);
   return (
     <>
       <div className="p-3">
@@ -136,9 +137,17 @@ const ChatLeft = () => {
           })
         ) : (
           <div className=" box-border container-snap">
-            {allChats?.map((chat) => {
-              return <MyChats key={chat._id} chat={chat} />;
-            })}
+            {allChats.length > 0 ? (
+              loading ? (
+                <p>Loading...</p>
+              ) : (
+                allChats?.map((chat) => {
+                  return <MyChats key={chat._id} chat={chat} />;
+                })
+              )
+            ) : (
+              <p className="font-semibold">Please search users to chat.</p>
+            )}
           </div>
         )}
         {openGroupModal && (
@@ -151,8 +160,6 @@ const ChatLeft = () => {
           />
         )}
       </div>
-
-      <Toaster position="top-center" reverseOrder={false} />
     </>
   );
 };
