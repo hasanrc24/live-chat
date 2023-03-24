@@ -1,20 +1,76 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { chatSelector } from "../../redux/chatSlice";
+import { userSelector } from "../../redux/userSlice";
 
 const ChatBox = ({ notifyError, notifySuccess }) => {
   const [loading, setLoading] = useState(false);
   const [messageInput, setMessageInput] = useState("");
+  const [allMessages, setAllMessages] = useState([]);
 
-  const handleInputChange = (e) => {
-    setMessageInput(e.target.valuee);
+  const { user } = useSelector(userSelector);
+  const { selectedChat } = useSelector(chatSelector);
+
+  const fetchMessages = async () => {
+    if (!selectedChat) {
+      return;
+    }
+    try {
+      setLoading(true);
+      const res = await axios.get(`api/message/${selectedChat._id}`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      if (res.status === 200) {
+        setLoading(false);
+        setAllMessages(res.data);
+        console.log(res.data);
+      }
+    } catch (error) {
+      console.log(error);
+      notifyError("Error loading messages!");
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleInputChange = (e) => {
+    setMessageInput(e.target.value);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!messageInput.length > 0) {
+    if (!messageInput) {
       notifyError("Message can't be empty.");
       return;
     }
+
+    try {
+      setMessageInput("");
+      const res = await axios.post(
+        "/api/message",
+        {
+          content: messageInput,
+          chatId: selectedChat._id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      if (res.status === 200) {
+        setAllMessages([...allMessages, res.data]);
+      }
+    } catch (error) {
+      console.log(error);
+      notifyError("Message was not sent!");
+    }
   };
+
+  useEffect(() => {
+    fetchMessages();
+  }, [selectedChat]);
   return (
     <div className="bg-chat-bg h-full -mt-14 pt-14 z-10 relative flex flex-col">
       <div className="flex-1  p-3">
