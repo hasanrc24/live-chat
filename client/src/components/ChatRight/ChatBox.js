@@ -3,6 +3,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { chatSelector } from "../../redux/chatSlice";
 import { userSelector } from "../../redux/userSlice";
+import Message from "./Message";
 
 const ChatBox = ({ notifyError, notifySuccess }) => {
   const [loading, setLoading] = useState(false);
@@ -26,7 +27,7 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
       if (res.status === 200) {
         setLoading(false);
         setAllMessages(res.data);
-        console.log(res.data);
+        // console.log(res.data);
       }
     } catch (error) {
       console.log(error);
@@ -74,7 +75,15 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
   return (
     <div className="bg-chat-bg h-full -mt-14 pt-14 z-10 relative flex flex-col">
       <div className="flex-1  p-3">
-        {loading ? <p>Loading...</p> : <div>Messages</div>}
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <div className="flex flex-col justify-end h-full">
+            {allMessages?.map((msg) => {
+              return <Message key={msg._id} message={msg} />;
+            })}
+          </div>
+        )}
       </div>
 
       <form onSubmit={handleSubmit} className="bg-white p-3 flex">
