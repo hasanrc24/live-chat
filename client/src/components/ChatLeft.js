@@ -13,7 +13,7 @@ import {
 import MyChats from "./MyChats";
 import GroupChatModal from "./Modals/GroupChatModal";
 
-const ChatLeft = ({ notifyError, notifySuccess, setReRender, reRender }) => {
+const ChatLeft = ({ notifyError, notifySuccess }) => {
   const [searchValue, setSearchValue] = useState("");
   const [searchData, setSearchData] = useState([]);
   const [allChats, setAllChats] = useState([]);
@@ -98,9 +98,6 @@ const ChatLeft = ({ notifyError, notifySuccess, setReRender, reRender }) => {
     }
   }, []);
 
-  useEffect(() => {
-    console.log("render from left");
-  }, [reRender]);
   return (
     <>
       <div className="p-3">
@@ -145,14 +142,7 @@ const ChatLeft = ({ notifyError, notifySuccess, setReRender, reRender }) => {
                 <p>Loading...</p>
               ) : (
                 chats?.map((chat) => {
-                  return (
-                    <MyChats
-                      key={chat._id}
-                      chat={chat}
-                      setReRender={setReRender}
-                      reRender={reRender}
-                    />
-                  );
+                  return <MyChats key={chat._id} chat={chat} />;
                 })
               )
             ) : (

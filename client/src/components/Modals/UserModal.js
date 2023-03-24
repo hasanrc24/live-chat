@@ -14,13 +14,7 @@ import {
   dispatchSelectedChat,
 } from "../../redux/chatSlice";
 
-const UserModal = ({
-  setOpenModal,
-  notifyError,
-  notifySuccess,
-  setReRender,
-  reRender,
-}) => {
+const UserModal = ({ setOpenModal, notifyError, notifySuccess }) => {
   const [loading, setLoading] = useState(false);
   const [chatName, setChatName] = useState("");
   const [searchInput, setSearchInput] = useState("");
@@ -53,7 +47,6 @@ const UserModal = ({
       );
       if (res.status === 200) {
         setLoading(false);
-        setReRender(!reRender);
         dispatch(dispatchSelectedChat(res.data));
         const temp = chats?.filter((ch) => selectedChat._id !== ch._id);
         dispatch(dispatchChats([res.data, ...temp]));
@@ -93,7 +86,6 @@ const UserModal = ({
           const temp = chats?.filter((ch) => ch._id !== res.data._id);
           dispatch(dispatchChats(temp));
           notifySuccess("Left from group!");
-          setReRender(!reRender);
         } else {
           dispatch(dispatchSelectedChat(res.data));
           notifySuccess("User removed");
@@ -183,7 +175,6 @@ const UserModal = ({
       );
       if (res.status === 200) {
         setLoading(false);
-        setReRender(!reRender);
         setOpenModal(false);
         dispatch(dispatchSelectedChat({}));
         const temp = chats?.filter((ch) => ch._id !== res.data._id);

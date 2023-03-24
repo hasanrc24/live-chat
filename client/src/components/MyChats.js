@@ -14,9 +14,9 @@ const MyChats = ({ chat, setReRender, reRender }) => {
     dispatch(toggleRight());
     dispatch(dispatchSelectedChat(chat));
   };
-  useEffect(() => {
-    console.log("mychats");
-  }, []);
+  // useEffect(() => {
+  //   console.log("mychats");
+  // }, []);
   return (
     <div
       onClick={handleSelectChat}

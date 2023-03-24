@@ -15,7 +15,6 @@ const Home = () => {
   const notifyError = (msg) => toast.error(msg);
   const notifySuccess = (msg) => toast.success(msg);
 
-  const [reRender, setReRender] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [chatOptionModal, setChatOptionModal] = useState(false);
 
@@ -40,12 +39,7 @@ const Home = () => {
               toggle ? "block" : "hidden"
             } md:block border-r-2 h-0 md:h-full`}
           >
-            <ChatLeft
-              notifyError={notifyError}
-              notifySuccess={notifySuccess}
-              setReRender={setReRender}
-              reRender={reRender}
-            />
+            <ChatLeft notifyError={notifyError} notifySuccess={notifySuccess} />
           </div>
           <div
             className={`${toggle ? "hidden" : "block"} md:block md:col-span-2`}
@@ -55,8 +49,6 @@ const Home = () => {
               notifySuccess={notifySuccess}
               chatOptionModal={chatOptionModal}
               setChatOptionModal={setChatOptionModal}
-              setReRender={setReRender}
-              reRender={reRender}
             />
           </div>
         </div>

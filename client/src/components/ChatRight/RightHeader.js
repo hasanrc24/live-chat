@@ -11,8 +11,6 @@ const RightHeader = ({
   setOpenModal,
   notifyError,
   notifySuccess,
-  setReRender,
-  reRender,
 }) => {
   const { user } = useSelector(userSelector);
   const { selectedChat } = useSelector(chatSelector);
@@ -45,8 +43,6 @@ const RightHeader = ({
           setOpenModal={setOpenModal}
           notifyError={notifyError}
           notifySuccess={notifySuccess}
-          setReRender={setReRender}
-          reRender={reRender}
         />
       )}
     </div>

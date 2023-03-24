@@ -11,15 +11,10 @@ const ChatRight = ({
   notifySuccess,
   chatOptionModal,
   setChatOptionModal,
-  setReRender,
-  reRender,
 }) => {
   const { user } = useSelector(userSelector);
   const { selectedChat } = useSelector(chatSelector);
 
-  useEffect(() => {
-    console.log("Render from right");
-  }, [reRender]);
   return (
     <div className="h-full">
       {Object.keys(selectedChat).length !== 0 ? (
@@ -29,8 +24,6 @@ const ChatRight = ({
             setOpenModal={setChatOptionModal}
             notifyError={notifyError}
             notifySuccess={notifySuccess}
-            setReRender={setReRender}
-            reRender={reRender}
           />
           <ChatBox />
         </>
