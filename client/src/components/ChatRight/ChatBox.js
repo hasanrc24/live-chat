@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { chatSelector } from "../../redux/chatSlice";
 import { userSelector } from "../../redux/userSlice";
 import Message from "./Message";
+import ScrollableFeed from "react-scrollable-feed";
 
 const ChatBox = ({ notifyError, notifySuccess }) => {
   const [loading, setLoading] = useState(false);
@@ -73,8 +74,8 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
     fetchMessages();
   }, [selectedChat]);
   return (
-    <div className="bg-chat-bg h-full -mt-14 pt-14 z-10 relative flex flex-col">
-      <div className="flex-1  p-3">
+    <div className="bg-chat-bg h-full -mt-14 pt-14 z-10 flex flex-col">
+      <div className="flex-1 p-3 h-full">
         {loading ? (
           <p>Loading...</p>
         ) : (
