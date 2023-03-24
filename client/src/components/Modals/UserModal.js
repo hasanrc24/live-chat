@@ -228,8 +228,10 @@ const UserModal = ({
             </p>
           </div>
         ) : (
-          <div className="m-auto text-center mx-4">
-            <h2 className="text-3xl font-semibold">{selectedChat.chatName}</h2>
+          <div className="m-auto text-center mx-4 break-words">
+            <h2 className="text-3xl font-semibold mb-3">
+              {selectedChat.chatName}
+            </h2>
             <p>
               <span className="font-semibold">Admin: </span>
               {selectedChat.groupAdmin.name}
