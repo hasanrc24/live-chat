@@ -25,7 +25,7 @@ const ChatRight = ({
             notifyError={notifyError}
             notifySuccess={notifySuccess}
           />
-          <ChatBox />
+          <ChatBox notifyError={notifyError} notifySuccess={notifySuccess} />
         </>
       ) : (
         <div className="flex justify-center items-center h-full">
