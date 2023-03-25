@@ -74,157 +74,31 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
     fetchMessages();
   }, [selectedChat]);
   return (
-    // <div className="bg-chat-bg h-64 -mt-14 pt-14 p-3 flex flex-col">
-    //   {/* <div className="flex-1 p-3 h-full"> */}
-    //   {loading ? (
-    //     <p>Loading...</p>
-    //   ) : (
-    //     <div className="flex flex-col justify-end h-full overflow-scroll">
-    //       {allMessages?.map((msg) => {
-    //         return <Message key={msg._id} message={msg} />;
-    //       })}
-    //     </div>
-    //   )}
-    //   {/* </div> */}
-
-    //   <form onSubmit={handleSubmit} className="bg-white p-3 flex">
-    //     <input
-    //       type="text"
-    //       value={messageInput}
-    //       onChange={handleInputChange}
-    //       placeholder="Type a messaage"
-    //       className="bg-chat-bg px-3 py-2 flex-1 rounded-l-md outline-none"
-    //     />
-    //     <input
-    //       type="submit"
-    //       value="Send"
-    //       className="px-4 py-2 bg-brand text-white rounded-r-md cursor-pointer"
-    //     />
-    //   </form>
-    // </div>
-
-    <ScrollableFeed className="bg-chat-bg flex-1 h-[30vh] overflow-y-scroll">
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        allMessages?.map((msg) => {
-          return <Message key={msg._id} message={msg} />;
-        })
-      )}
-      {/* <div className="flex items-start mb-4">
-        <div className="flex-shrink-0 mr-3">
-          <img
-            src="https://via.placeholder.com/40"
-            alt="Profile pic"
-            className="w-8 h-8 rounded-full"
-          />
-        </div>
-        <div className="flex-1">
-          <div className="bg-gray-200 px-4 py-2 rounded-lg text-gray-700">
-            <p>Hello, how are you?</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex items-start mb-4 justify-end">
-        <div className="flex-1 text-right">
-          <div className="bg-blue-600 px-4 py-2 rounded-lg text-white">
-            <p>Hey, I'm good thanks. How about you?</p>
-          </div>
-        </div>
-        <div className="flex-shrink-0 ml-3">
-          <img
-            src="https://via.placeholder.com/40"
-            alt="Profile pic"
-            className="w-8 h-8 rounded-full"
-          />
-        </div>
-      </div>
-      <div className="flex items-start mb-4 justify-end">
-        <div className="flex-1 text-right">
-          <div className="bg-blue-600 px-4 py-2 rounded-lg text-white">
-            <p>Hey, I'm good thanks. How about you?</p>
-          </div>
-        </div>
-        <div className="flex-shrink-0 ml-3">
-          <img
-            src="https://via.placeholder.com/40"
-            alt="Profile pic"
-            className="w-8 h-8 rounded-full"
-          />
-        </div>
-      </div>
-      <div className="flex items-start mb-4 justify-end">
-        <div className="flex-1 text-right">
-          <div className="bg-blue-600 px-4 py-2 rounded-lg text-white">
-            <p>Hey, I'm good thanks. How about you?</p>
-          </div>
-        </div>
-        <div className="flex-shrink-0 ml-3">
-          <img
-            src="https://via.placeholder.com/40"
-            alt="Profile pic"
-            className="w-8 h-8 rounded-full"
-          />
-        </div>
-      </div>
-      <div className="flex items-start mb-4 justify-end">
-        <div className="flex-1 text-right">
-          <div className="bg-blue-600 px-4 py-2 rounded-lg text-white">
-            <p>Hey, I'm good thanks. How about you?</p>
-          </div>
-        </div>
-        <div className="flex-shrink-0 ml-3">
-          <img
-            src="https://via.placeholder.com/40"
-            alt="Profile pic"
-            className="w-8 h-8 rounded-full"
-          />
-        </div>
-      </div>
-      <div className="flex items-start mb-4 justify-end">
-        <div className="flex-1 text-right">
-          <div className="bg-blue-600 px-4 py-2 rounded-lg text-white">
-            <p>Hey, I'm good thanks. How about you?</p>
-          </div>
-        </div>
-        <div className="flex-shrink-0 ml-3">
-          <img
-            src="https://via.placeholder.com/40"
-            alt="Profile pic"
-            className="w-8 h-8 rounded-full"
-          />
-        </div>
-      </div>
-      <div className="flex items-start mb-4 justify-end">
-        <div className="flex-1 text-right">
-          <div className="bg-blue-600 px-4 py-2 rounded-lg text-white">
-            <p>Hey, I'm good thanks. How about you?</p>
-          </div>
-        </div>
-        <div className="flex-shrink-0 ml-3">
-          <img
-            src="https://via.placeholder.com/40"
-            alt="Profile pic"
-            className="w-8 h-8 rounded-full"
-          />
-        </div>
-      </div>
-      <div className="flex items-start mb-4 justify-end">
-        <div className="flex-1 text-right">
-          <div className="bg-blue-600 px-4 py-2 rounded-lg text-white">
-            <p>Hey, I'm good thanks. How about you?</p>
-          </div>
-        </div>
-        <div className="flex-shrink-0 ml-3">
-          <img
-            src="https://via.placeholder.com/40"
-            alt="Profile pic"
-            className="w-8 h-8 rounded-full"
-          />
-        </div>
-      </div> */}
-    </ScrollableFeed>
+    <>
+      <ScrollableFeed className="bg-chat-bg flex-1 pt-1 w-[90vw] md:w-full overflow-y-scroll chat-scroll">
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          allMessages?.map((msg) => {
+            return <Message key={msg._id} message={msg} />;
+          })
+        )}
+      </ScrollableFeed>
+      <form onSubmit={handleSubmit} className="bg-white p-3 flex">
+        <input
+          type="text"
+          value={messageInput}
+          onChange={handleInputChange}
+          placeholder="Type a messaage"
+          className="bg-chat-bg px-3 py-2 flex-1 rounded-l-md outline-none"
+        />
+        <input
+          type="submit"
+          value="Send"
+          className="px-4 py-2 bg-brand text-white rounded-r-md cursor-pointer"
+        />
+      </form>
+    </>
   );
 };
 

@@ -100,8 +100,8 @@ const ChatLeft = ({ notifyError, notifySuccess }) => {
 
   return (
     <>
-      <div className="p-3">
-        <div className="flex justify-between items-center border-b-2 pb-3">
+      <div className="p-3 md:pr-0">
+        <div className="flex justify-between items-center border-b-2 pb-3 md:pr-3">
           <p className="font-semibold text-lg">My Chats</p>
           <button
             onClick={() => setOpenGroupModal(true)}
@@ -111,7 +111,7 @@ const ChatLeft = ({ notifyError, notifySuccess }) => {
             <BiPlus />
           </button>
         </div>
-        <div className="my-3 flex items-center bg-chat-bg pl-2 rounded-md">
+        <div className="my-3 flex items-center bg-chat-bg pl-2 rounded-md md:mr-3">
           <label htmlFor="search_id">
             <BiSearchAlt2 className="h-6 w-6 text-gray-500" />
           </label>
@@ -136,7 +136,7 @@ const ChatLeft = ({ notifyError, notifySuccess }) => {
             );
           })
         ) : (
-          <div className=" box-border container-snap">
+          <div className=" container-snap overflow-y-auto md:pr-3 h-[50vh]">
             {chats?.length > 0 ? (
               loading ? (
                 <p>Loading...</p>

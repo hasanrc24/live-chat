@@ -33,7 +33,7 @@ const Home = () => {
     <div className="bg-brand-bg h-screen flex justify-center items-center">
       <div className="h-[90vh] w-[90vw] md:h-[80vh] md:w-[70vw] bg-white rounded-xl shadow-xl overflow-hidden">
         <Header openModal={openModal} setOpenModal={setOpenModal} />
-        <div className="grid md:grid-cols-3 sm:grid-col-2 h-full -mt-16 pt-16">
+        <div className="grid md:grid-cols-3 sm:grid-col-2 h-full -mt-16 pt-16 z-20">
           <div
             className={`${
               toggle ? "block" : "hidden"
@@ -42,7 +42,9 @@ const Home = () => {
             <ChatLeft notifyError={notifyError} notifySuccess={notifySuccess} />
           </div>
           <div
-            className={`${toggle ? "hidden" : "block"} md:block md:col-span-2`}
+            className={`${
+              toggle ? "hidden" : "block"
+            } md:block md:col-span-2 -mt-16`}
           >
             <ChatRight
               notifyError={notifyError}

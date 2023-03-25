@@ -18,7 +18,7 @@ const ChatRight = ({
   return (
     <>
       {Object.keys(selectedChat).length !== 0 ? (
-        <div className="flex flex-col h-[60vh]">
+        <div className="flex flex-col h-[90vh] md:h-[80vh] pt-16 z-0">
           <RightHeader
             openModal={chatOptionModal}
             setOpenModal={setChatOptionModal}
@@ -26,23 +26,9 @@ const ChatRight = ({
             notifySuccess={notifySuccess}
           />
           <ChatBox notifyError={notifyError} notifySuccess={notifySuccess} />
-          <form className="bg-white p-3 flex">
-            <input
-              type="text"
-              // value={messageInput}
-              // onChange={handleInputChange}
-              placeholder="Type a messaage"
-              className="bg-chat-bg px-3 py-2 flex-1 rounded-l-md outline-none"
-            />
-            <input
-              type="submit"
-              value="Send"
-              className="px-4 py-2 bg-brand text-white rounded-r-md cursor-pointer"
-            />
-          </form>
         </div>
       ) : (
-        <div className="flex justify-center items-center h-full">
+        <div className="flex justify-center items-center h-[90vh] md:h-[80vh]">
           <p className="text-xl font-semibold">
             Select a user to start chatting.
           </p>

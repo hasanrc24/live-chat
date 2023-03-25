@@ -24,19 +24,19 @@ const Header = ({ openModal, setOpenModal }) => {
     navigate("/login");
   };
   return (
-    <div className="bg-brand text-white p-4 flex justify-between items-center">
+    <div className="bg-brand text-white p-4 flex justify-between items-center z-50">
       <div
         onClick={() =>
           dispatch(toggleLeft(), dispatch(dispatchSelectedChat({})))
         }
-        className="block md:hidden w-1/3 md:w-full cursor-pointer"
+        className="block md:hidden w-1/3 md:w-full cursor-pointer relative"
       >
         {!toggle && <HiArrowSmLeft className="h-7 w-7" />}
       </div>
       <p className="font-semibold text-lg text-center md:text-left w-1/3 md:w-full">
         Live Chat
       </p>
-      <div className="font-semibold flex gap-3 w-1/3 md:w-full justify-end">
+      <div className="font-semibold flex gap-3 w-1/3 md:w-full justify-end relative">
         <div className="flex items-center cursor-pointer">
           <IoNotificationsSharp className="h-5 w-5" />
         </div>
