@@ -31,7 +31,7 @@ const Home = () => {
   }, []);
   return (
     <div className="bg-brand-bg h-screen flex justify-center items-center">
-      <div className="h-[90%] w-[90%] md:h-[80%] md:w-[70%] bg-white rounded-xl shadow-xl overflow-hidden">
+      <div className="h-[90vh] w-[90vw] md:h-[80vh] md:w-[70vw] bg-white rounded-xl shadow-xl overflow-hidden">
         <Header openModal={openModal} setOpenModal={setOpenModal} />
         <div className="grid md:grid-cols-3 sm:grid-col-2 h-full -mt-16 pt-16">
           <div

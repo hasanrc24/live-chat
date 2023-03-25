@@ -5,9 +5,8 @@ import { userSelector } from "../../redux/userSlice";
 
 const Message = ({ message }) => {
   const { user } = useSelector(userSelector);
-  console.log(message);
   return (
-    <div className="  overflow-hidden">
+    <>
       {message.sender.email === user.email ? (
         <div className="flex justify-end items-start gap-2 m-2">
           <div className="-mt-2 max-w-[70%]">
@@ -47,7 +46,7 @@ const Message = ({ message }) => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

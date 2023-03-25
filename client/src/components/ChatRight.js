@@ -16,9 +16,9 @@ const ChatRight = ({
   const { selectedChat } = useSelector(chatSelector);
 
   return (
-    <div className="h-full">
+    <>
       {Object.keys(selectedChat).length !== 0 ? (
-        <>
+        <div className="flex flex-col h-[60vh]">
           <RightHeader
             openModal={chatOptionModal}
             setOpenModal={setChatOptionModal}
@@ -26,7 +26,21 @@ const ChatRight = ({
             notifySuccess={notifySuccess}
           />
           <ChatBox notifyError={notifyError} notifySuccess={notifySuccess} />
-        </>
+          <form className="bg-white p-3 flex">
+            <input
+              type="text"
+              // value={messageInput}
+              // onChange={handleInputChange}
+              placeholder="Type a messaage"
+              className="bg-chat-bg px-3 py-2 flex-1 rounded-l-md outline-none"
+            />
+            <input
+              type="submit"
+              value="Send"
+              className="px-4 py-2 bg-brand text-white rounded-r-md cursor-pointer"
+            />
+          </form>
+        </div>
       ) : (
         <div className="flex justify-center items-center h-full">
           <p className="text-xl font-semibold">
@@ -34,7 +48,7 @@ const ChatRight = ({
           </p>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
