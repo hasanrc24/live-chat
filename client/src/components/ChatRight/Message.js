@@ -1,13 +1,13 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { formatTime } from "../../config/config";
+import { formatTime, isLastMessage, isSameSender } from "../../config/config";
 import { userSelector } from "../../redux/userSlice";
 
-const Message = ({ message }) => {
+const Message = ({ message, index }) => {
   const { user } = useSelector(userSelector);
   return (
     <>
-      {message.sender.email === user.email ? (
+      {message.sender._id === user._id ? (
         <div className="flex justify-end items-start gap-2 m-2">
           <div className="-mt-2 max-w-[70%]">
             <p className="text-xs mb-[.15rem] font-semibold text-gray-500 text-right">

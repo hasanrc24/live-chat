@@ -5,14 +5,22 @@ import { chatSelector } from "../../redux/chatSlice";
 import { userSelector } from "../../redux/userSlice";
 import Message from "./Message";
 import ScrollableFeed from "react-scrollable-feed";
+import io from "socket.io-client";
 
 const ChatBox = ({ notifyError, notifySuccess }) => {
   const [loading, setLoading] = useState(false);
   const [messageInput, setMessageInput] = useState("");
   const [allMessages, setAllMessages] = useState([]);
 
+  const [socketConnect, setSocketConnect] = useState(false);
+
   const { user } = useSelector(userSelector);
   const { selectedChat } = useSelector(chatSelector);
+
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+  const ENDPOINT = "http://localhost:5000";
+  var socket, selectedChatCompare;
 
   const fetchMessages = async () => {
     if (!selectedChat) {
@@ -28,6 +36,7 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
       if (res.status === 200) {
         setLoading(false);
         setAllMessages(res.data);
+        socket.emit("join_chat", selectedChat._id);
         // console.log(res.data);
       }
     } catch (error) {
@@ -62,6 +71,9 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
         }
       );
       if (res.status === 200) {
+        if (socket) {
+          socket.emit("new_message", res.data);
+        }
         setAllMessages([...allMessages, res.data]);
       }
     } catch (error) {
@@ -71,16 +83,39 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
   };
 
   useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit("setup", userInfo);
+    socket.on("connected", () => setSocketConnect(true));
+  }, []);
+
+  useEffect(() => {
     fetchMessages();
+    selectedChatCompare = selectedChat;
   }, [selectedChat]);
+
+  useEffect(() => {
+    // if (socket) {
+    socket.on("message_received", (newMsgR) => {
+      if (
+        !selectedChatCompare ||
+        selectedChatCompare._id !== newMsgR.chat._id
+      ) {
+        console.log("Problem");
+      } else {
+        setAllMessages([...allMessages, newMsgR]);
+      }
+    });
+    // }
+  });
+
   return (
     <>
       <ScrollableFeed className="bg-chat-bg flex-1 pt-1 w-[90vw] md:w-full overflow-y-scroll chat-scroll">
         {loading ? (
-          <p>Loading...</p>
+          <p className="flex justify-center items-center">Loading...</p>
         ) : (
-          allMessages?.map((msg) => {
-            return <Message key={msg._id} message={msg} />;
+          allMessages?.map((msg, i) => {
+            return <Message key={msg._id} message={msg} index={i} />;
           })
         )}
       </ScrollableFeed>

@@ -4,7 +4,7 @@ import { chatSelector } from "../redux/chatSlice";
 import { userSelector } from "../redux/userSlice";
 import ChatBox from "./ChatRight/ChatBox";
 import RightHeader from "./ChatRight/RightHeader";
-import Modal from "./Modals/Modal";
+import io from "socket.io-client";
 
 const ChatRight = ({
   notifyError,
@@ -14,6 +14,17 @@ const ChatRight = ({
 }) => {
   const { user } = useSelector(userSelector);
   const { selectedChat } = useSelector(chatSelector);
+
+  // const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+  // const ENDPOINT = "http://localhost:5000";
+  // let socket, selectedChatCompate;
+
+  // useEffect(() => {
+  //   socket = io(ENDPOINT);
+  //   socket.emit("setup", userInfo);
+  //   socket.on("connection", () => setSocketConnect(true));
+  // }, []);
 
   return (
     <>
@@ -25,7 +36,11 @@ const ChatRight = ({
             notifyError={notifyError}
             notifySuccess={notifySuccess}
           />
-          <ChatBox notifyError={notifyError} notifySuccess={notifySuccess} />
+          <ChatBox
+            notifyError={notifyError}
+            notifySuccess={notifySuccess}
+            // soclet={socket}
+          />
         </div>
       ) : (
         <div className="flex justify-center items-center h-[90vh] md:h-[80vh]">
