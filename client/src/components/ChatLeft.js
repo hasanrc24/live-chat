@@ -136,7 +136,7 @@ const ChatLeft = ({ notifyError, notifySuccess }) => {
             );
           })
         ) : (
-          <div className=" container-snap overflow-y-auto md:pr-3 h-[50vh]">
+          <div className=" container-snap overflow-y-auto md:pr-3 h-[60vh] md:h-[50vh]">
             {chats?.length > 0 ? (
               loading ? (
                 <p>Loading...</p>
