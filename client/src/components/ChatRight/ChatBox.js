@@ -20,7 +20,8 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
   const ENDPOINT = "http://localhost:5000";
-  var socket, selectedChatCompare;
+  let socket = io.connect(ENDPOINT);
+  let selectedChatCompare;
 
   const fetchMessages = async () => {
     if (!selectedChat) {
@@ -37,7 +38,6 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
         setLoading(false);
         setAllMessages(res.data);
         socket.emit("join_chat", selectedChat._id);
-        // console.log(res.data);
       }
     } catch (error) {
       console.log(error);
@@ -71,10 +71,8 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
         }
       );
       if (res.status === 200) {
-        if (socket) {
-          socket.emit("new_message", res.data);
-        }
         setAllMessages([...allMessages, res.data]);
+        socket.emit("new_message", res.data);
       }
     } catch (error) {
       console.log(error);
@@ -83,7 +81,7 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
   };
 
   useEffect(() => {
-    socket = io(ENDPOINT);
+    // socket = io.connect(ENDPOINT);
     socket.emit("setup", userInfo);
     socket.on("connected", () => setSocketConnect(true));
   }, []);
@@ -94,25 +92,27 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
   }, [selectedChat]);
 
   useEffect(() => {
-    // if (socket) {
     socket.on("message_received", (newMsgR) => {
       if (
         !selectedChatCompare ||
         selectedChatCompare._id !== newMsgR.chat._id
       ) {
-        console.log("Problem");
+        // console.log("Other user");
       } else {
-        setAllMessages([...allMessages, newMsgR]);
+        setAllMessages((prevMsgs) => [...prevMsgs, newMsgR]);
       }
     });
-    // }
-  });
+  }, [socket]);
 
   return (
     <>
       <ScrollableFeed className="bg-chat-bg flex-1 pt-1 w-[90vw] md:w-full overflow-y-scroll chat-scroll">
         {loading ? (
           <p className="flex justify-center items-center">Loading...</p>
+        ) : allMessages.length === 0 ? (
+          <p className="flex justify-center items-center">
+            No messages to display.
+          </p>
         ) : (
           allMessages?.map((msg, i) => {
             return <Message key={msg._id} message={msg} index={i} />;

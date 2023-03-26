@@ -5,11 +5,14 @@ const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
+const cors = require("cors");
+const { Server } = require("socket.io");
 
 const app = express();
 dotenv.config();
 connectDB();
 app.use(express.json());
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("Server is live.");
@@ -27,7 +30,7 @@ const server = app.listen(
   console.log("Server Running")
 );
 
-const io = require("socket.io")(server, {
+const io = new Server(server, {
   pingTimeout: 60000,
   cors: {
     origin: "http://localhost:3000",
@@ -42,7 +45,6 @@ io.on("connection", (socket) => {
 
   socket.on("join_chat", (room) => {
     socket.join(room);
-    console.log("Room: ", room);
   });
 
   socket.on("new_message", (newMsgR) => {
@@ -50,7 +52,7 @@ io.on("connection", (socket) => {
     if (!chat.users) return;
 
     chat.users.forEach((user) => {
-      if (user._id == newMsgR.sender._id) return;
+      if (user._id === newMsgR.sender._id) return;
 
       socket.in(user._id).emit("message_received", newMsgR);
     });

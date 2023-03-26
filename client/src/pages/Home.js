@@ -21,7 +21,6 @@ const Home = () => {
   const { toggle } = useSelector(toggleSelector);
 
   useEffect(() => {
-    console.log("Render");
     if (localStorage.getItem("userInfo")) {
       const info = JSON.parse(localStorage.getItem("userInfo"));
       dispatch(addUserInfo(info));

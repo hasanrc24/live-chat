@@ -12,6 +12,7 @@ import {
 } from "../redux/chatSlice";
 import MyChats from "./MyChats";
 import GroupChatModal from "./Modals/GroupChatModal";
+import { toggleRight } from "../redux/toggleSlice";
 
 const ChatLeft = ({ notifyError, notifySuccess }) => {
   const [searchValue, setSearchValue] = useState("");
@@ -52,6 +53,7 @@ const ChatLeft = ({ notifyError, notifySuccess }) => {
   };
 
   const accessChat = async (userId) => {
+    dispatch(toggleRight());
     try {
       const { data } = await axios.post(
         "/api/chat",
