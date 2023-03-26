@@ -12,6 +12,9 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
   const [messageInput, setMessageInput] = useState("");
   const [allMessages, setAllMessages] = useState([]);
 
+  const [typing, setTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+
   const [socketConnect, setSocketConnect] = useState(false);
 
   const { user } = useSelector(userSelector);
@@ -47,6 +50,24 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
 
   const handleInputChange = (e) => {
     setMessageInput(e.target.value);
+    if (!socketConnect) return;
+
+    if (!typing) {
+      setTyping(true);
+      socket.emit("typing", selectedChat._id);
+    }
+
+    let lastTypingTime = new Date().getTime();
+    const timerLength = 2000;
+    setTimeout(() => {
+      let timeNow = new Date().getTime();
+      let timeDiff = timeNow - lastTypingTime;
+
+      if (timeDiff >= timerLength && typing) {
+        socket.emit("stop_typing", selectedChat._id);
+        setTyping(false);
+      }
+    }, timerLength);
   };
 
   const handleSubmit = async (e) => {
@@ -55,6 +76,8 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
       notifyError("Message can't be empty.");
       return;
     }
+
+    socket.emit("stop_typing", selectedChat._id);
 
     try {
       setMessageInput("");
@@ -84,6 +107,8 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
     // socket = io.connect(ENDPOINT);
     socket.emit("setup", userInfo);
     socket.on("connected", () => setSocketConnect(true));
+    socket.on("typing", () => setIsTyping(true));
+    socket.on("stop_typing", () => setIsTyping(false));
   }, []);
 
   useEffect(() => {
@@ -118,6 +143,7 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
             return <Message key={msg._id} message={msg} index={i} />;
           })
         )}
+        {isTyping && <p className="flex items-end justify-start">Typing...</p>}
       </ScrollableFeed>
       <form onSubmit={handleSubmit} className="bg-white p-3 flex">
         <input
