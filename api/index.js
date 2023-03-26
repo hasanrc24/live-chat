@@ -47,8 +47,12 @@ io.on("connection", (socket) => {
     socket.join(room);
   });
 
-  socket.on("typing", (room) => socket.in(room).emit("typing"));
-  socket.on("stop_typing", (room) => socket.in(room).emit("stop_typing"));
+  socket.on("typing", (room, typingUserId) =>
+    socket.to(room).emit("typing", typingUserId)
+  );
+  socket.on("stop_typing", (room, typingUserId) =>
+    socket.to(room).emit("stop_typing", typingUserId)
+  );
 
   socket.on("new_message", (newMsgR) => {
     let chat = newMsgR.chat;

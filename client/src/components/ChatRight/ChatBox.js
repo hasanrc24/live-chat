@@ -12,10 +12,10 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
   const [messageInput, setMessageInput] = useState("");
   const [allMessages, setAllMessages] = useState([]);
 
+  const [socketConnect, setSocketConnect] = useState(false);
   const [typing, setTyping] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
-
-  const [socketConnect, setSocketConnect] = useState(false);
+  const [typingUser, setTypingUser] = useState("");
 
   const { user } = useSelector(userSelector);
   const { selectedChat } = useSelector(chatSelector);
@@ -54,7 +54,7 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
 
     if (!typing) {
       setTyping(true);
-      socket.emit("typing", selectedChat._id);
+      socket.emit("typing", selectedChat._id, user._id);
     }
 
     let lastTypingTime = new Date().getTime();
@@ -107,8 +107,18 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
     // socket = io.connect(ENDPOINT);
     socket.emit("setup", userInfo);
     socket.on("connected", () => setSocketConnect(true));
-    socket.on("typing", () => setIsTyping(true));
-    socket.on("stop_typing", () => setIsTyping(false));
+    // socket.on("typing", () => setIsTyping(true));
+    // socket.on("stop_typing", () => setIsTyping(false));
+    socket.on("typing", (typingUserId) => {
+      if (typingUserId !== user._id) {
+        setIsTyping(true);
+      }
+    });
+    socket.on("stop_typing", (typingUserId) => {
+      if (typingUserId !== user._id) {
+        setIsTyping(false);
+      }
+    });
   }, []);
 
   useEffect(() => {
