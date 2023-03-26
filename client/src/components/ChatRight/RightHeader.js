@@ -15,7 +15,7 @@ const RightHeader = ({
   const { user } = useSelector(userSelector);
   const { selectedChat } = useSelector(chatSelector);
   return (
-    <div className="flex justify-between items-center p-3 bg-white relative z-20">
+    <div className="flex justify-between items-center px-3 py-2 bg-white relative z-20">
       <div className="flex gap-2">
         <img
           src={

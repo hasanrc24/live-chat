@@ -6,6 +6,8 @@ import { userSelector } from "../../redux/userSlice";
 import Message from "./Message";
 import ScrollableFeed from "react-scrollable-feed";
 import io from "socket.io-client";
+import Lottie from "lottie-react";
+import typingAnimation from "../../typing.json";
 
 const ChatBox = ({ notifyError, notifySuccess }) => {
   const [loading, setLoading] = useState(false);
@@ -15,7 +17,6 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
   const [socketConnect, setSocketConnect] = useState(false);
   const [typing, setTyping] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
-  const [typingUser, setTypingUser] = useState("");
 
   const { user } = useSelector(userSelector);
   const { selectedChat } = useSelector(chatSelector);
@@ -107,8 +108,6 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
     // socket = io.connect(ENDPOINT);
     socket.emit("setup", userInfo);
     socket.on("connected", () => setSocketConnect(true));
-    // socket.on("typing", () => setIsTyping(true));
-    // socket.on("stop_typing", () => setIsTyping(false));
     socket.on("typing", (typingUserId) => {
       if (typingUserId !== user._id) {
         setIsTyping(true);
@@ -141,7 +140,7 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
 
   return (
     <>
-      <ScrollableFeed className="bg-chat-bg flex-1 pt-1 w-[90vw] md:w-full overflow-y-scroll chat-scroll">
+      <ScrollableFeed className="bg-chat-bg flex flex-col flex-grow pt-1 w-[90vw] md:w-full overflow-y-auto chat-scroll">
         {loading ? (
           <p className="flex justify-center items-center">Loading...</p>
         ) : allMessages.length === 0 ? (
@@ -149,11 +148,25 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
             No messages to display.
           </p>
         ) : (
-          allMessages?.map((msg, i) => {
-            return <Message key={msg._id} message={msg} index={i} />;
-          })
+          <>
+            <div className="flex-grow"></div>
+            {allMessages?.map((msg, i) => {
+              return <Message key={msg._id} message={msg} index={i} />;
+            })}
+          </>
         )}
-        {isTyping && <p className="flex items-end justify-start">Typing...</p>}
+        {isTyping && (
+          <>
+            {/* <p className="text-start px-5 py-3">Typing...</p> */}
+            {/* <div className="mr-auto"> */}
+            <Lottie
+              animationData={typingAnimation}
+              loop={true}
+              style={{ marginRight: "auto" }}
+            />
+            {/* </div> */}
+          </>
+        )}
       </ScrollableFeed>
       <form onSubmit={handleSubmit} className="bg-white p-3 flex">
         <input

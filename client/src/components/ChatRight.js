@@ -15,17 +15,6 @@ const ChatRight = ({
   const { user } = useSelector(userSelector);
   const { selectedChat } = useSelector(chatSelector);
 
-  // const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-
-  // const ENDPOINT = "http://localhost:5000";
-  // let socket, selectedChatCompate;
-
-  // useEffect(() => {
-  //   socket = io(ENDPOINT);
-  //   socket.emit("setup", userInfo);
-  //   socket.on("connection", () => setSocketConnect(true));
-  // }, []);
-
   return (
     <>
       {Object.keys(selectedChat).length !== 0 ? (
