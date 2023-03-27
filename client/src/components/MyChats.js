@@ -7,14 +7,13 @@ import { userSelector } from "../redux/userSlice";
 
 const MyChats = ({ chat }) => {
   const dispatch = useDispatch();
-  const { selectedChat } = useSelector(chatSelector);
+  const { selectedChat, notification } = useSelector(chatSelector);
   const { user } = useSelector(userSelector);
 
   const handleSelectChat = () => {
     dispatch(toggleRight());
     dispatch(dispatchSelectedChat(chat));
   };
-
   return (
     <div
       onClick={handleSelectChat}

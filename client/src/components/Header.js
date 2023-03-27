@@ -58,6 +58,11 @@ const Header = ({ openModal, setOpenModal }) => {
             onClick={() => setShoeNotif(!showNotif)}
             className="h-5 w-5"
           />
+          {notification.length !== 0 && (
+            <span className="h-4 w-4 rounded-full bg-red-600 -ml-2 -mb-2 text-white text-[.7rem] text-center">
+              {notification.length}
+            </span>
+          )}
           {showNotif && (
             <div className="absolute z-50 top-full right-full rounded-md shadow-md bg-white text-black px-3 py-2 w-max">
               {Object.keys(notification).length === 0 ? (

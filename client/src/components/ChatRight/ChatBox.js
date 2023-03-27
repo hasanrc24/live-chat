@@ -131,15 +131,15 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
   }, []);
 
   useEffect(() => {
-    Object.keys(selectedChat).length > 0 && fetchMessages();
+    fetchMessages();
     selectedChatCompare = selectedChat;
   }, [selectedChat]);
 
   useEffect(() => {
     socket.on("message_received", (newMsgR) => {
       if (
-        Object.keys(selectedChatCompare).length === 0 ||
-        selectedChatCompare._id !== newMsgR.chat._id
+        Object.keys(selectedChat).length === 0 ||
+        selectedChat._id !== newMsgR.chat._id
       ) {
         if (!notification.includes(newMsgR)) {
           dispatch(dispatchNotification(newMsgR));
@@ -152,54 +152,44 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
 
   return (
     <>
-      {Object.keys(selectedChat).length > 0 ? (
-        <>
-          <ScrollableFeed className="bg-chat-bg flex flex-col flex-grow pt-1 w-[90vw] md:w-full overflow-y-auto chat-scroll">
-            {loading ? (
-              <p className="flex justify-center items-center">Loading...</p>
-            ) : allMessages.length === 0 ? (
-              <p className="flex justify-center items-center">
-                No messages to display.
-              </p>
-            ) : (
+      <ScrollableFeed className="bg-chat-bg flex flex-col flex-grow pt-1 w-[90vw] md:w-full overflow-y-auto chat-scroll">
+        {loading ? (
+          <p className="flex justify-center items-center">Loading...</p>
+        ) : allMessages.length === 0 ? (
+          <p className="flex justify-center items-center">
+            No messages to display.
+          </p>
+        ) : (
+          <>
+            <div className="flex-grow"></div>
+            {allMessages?.map((msg, i) => {
+              return <Message key={msg._id} message={msg} index={i} />;
+            })}
+            {isTyping && (
               <>
-                <div className="flex-grow"></div>
-                {allMessages?.map((msg, i) => {
-                  return <Message key={msg._id} message={msg} index={i} />;
-                })}
-                {isTyping && (
-                  <>
-                    {/* <div className="flex-grow"></div> */}
-                    <div className="mr-auto">
-                      <Lottie animationData={typingAnimation} loop={true} />
-                    </div>
-                  </>
-                )}
+                {/* <div className="flex-grow"></div> */}
+                <div className="mr-auto">
+                  <Lottie animationData={typingAnimation} loop={true} />
+                </div>
               </>
             )}
-          </ScrollableFeed>
-          <form onSubmit={handleSubmit} className="bg-white p-3 flex">
-            <input
-              type="text"
-              value={messageInput}
-              onChange={handleInputChange}
-              placeholder="Type a messaage"
-              className="bg-chat-bg px-3 py-2 flex-1 rounded-l-md outline-none"
-            />
-            <input
-              type="submit"
-              value="Send"
-              className="px-4 py-2 bg-brand text-white rounded-r-md cursor-pointer"
-            />
-          </form>
-        </>
-      ) : (
-        <div className="flex justify-center items-center h-[90vh] md:h-[80vh]">
-          <p className="text-xl font-semibold">
-            Select a user to start chatting.
-          </p>
-        </div>
-      )}
+          </>
+        )}
+      </ScrollableFeed>
+      <form onSubmit={handleSubmit} className="bg-white p-3 flex">
+        <input
+          type="text"
+          value={messageInput}
+          onChange={handleInputChange}
+          placeholder="Type a messaage"
+          className="bg-chat-bg px-3 py-2 flex-1 rounded-l-md outline-none"
+        />
+        <input
+          type="submit"
+          value="Send"
+          className="px-4 py-2 bg-brand text-white rounded-r-md cursor-pointer"
+        />
+      </form>
     </>
   );
 };
