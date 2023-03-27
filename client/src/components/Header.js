@@ -6,11 +6,19 @@ import { useNavigate } from "react-router-dom";
 import { addUserInfo, userSelector } from "../redux/userSlice";
 import Modal from "./Modals/Modal";
 import { HiArrowSmLeft } from "react-icons/hi";
-import { toggleLeft, toggleSelector } from "../redux/toggleSlice";
-import { chatSelector, dispatchSelectedChat } from "../redux/chatSlice";
+import { toggleLeft, toggleRight, toggleSelector } from "../redux/toggleSlice";
+import {
+  chatSelector,
+  dispatchNotification,
+  dispatchSelectedChat,
+  removeNotificatin,
+  removeNotification,
+} from "../redux/chatSlice";
 
 const Header = ({ openModal, setOpenModal }) => {
   const [showMenu, setShowMenu] = useState(false);
+  const [showNotif, setShoeNotif] = useState(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -23,6 +31,13 @@ const Header = ({ openModal, setOpenModal }) => {
     dispatch(dispatchSelectedChat({}));
     localStorage.removeItem("userInfo");
     navigate("/login");
+  };
+
+  const handleNotification = (chat) => {
+    setShoeNotif(false);
+    dispatch(toggleRight());
+    dispatch(dispatchSelectedChat(chat));
+    dispatch(removeNotification(chat));
   };
   return (
     <div className="bg-brand text-white p-4 flex justify-between items-center z-50">
@@ -38,8 +53,32 @@ const Header = ({ openModal, setOpenModal }) => {
         Live Chat
       </p>
       <div className="font-semibold flex gap-3 w-1/3 md:w-full justify-end relative">
-        <div className="flex items-center cursor-pointer">
-          <IoNotificationsSharp className="h-5 w-5" />
+        <div className="flex items-center cursor-pointer relative">
+          <IoNotificationsSharp
+            onClick={() => setShoeNotif(!showNotif)}
+            className="h-5 w-5"
+          />
+          {showNotif && (
+            <div className="absolute z-50 top-full right-full rounded-md shadow-md bg-white text-black px-3 py-2 w-max">
+              {Object.keys(notification).length === 0 ? (
+                <p>Nothing here</p>
+              ) : (
+                notification?.map((noti) => {
+                  return (
+                    <div
+                      key={noti._id}
+                      className="text-sm font-normal border-y"
+                      onClick={() => handleNotification(noti?.chat)}
+                    >
+                      {noti?.chat?.isGroupChat === true
+                        ? `You got a message in ${noti?.chat?.chatName}`
+                        : `Message from ${noti?.sender?.name}`}
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          )}
         </div>
         <div
           onClick={() => setShowMenu(!showMenu)}
