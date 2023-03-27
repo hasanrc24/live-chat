@@ -31,7 +31,6 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
 
   const ENDPOINT = "http://localhost:5000";
   let socket = io.connect(ENDPOINT);
-  let selectedChatCompare;
 
   const fetchMessages = async () => {
     if (!selectedChat) {
@@ -115,7 +114,6 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
   };
 
   useEffect(() => {
-    // socket = io.connect(ENDPOINT);
     socket.emit("setup", userInfo);
     socket.on("connected", () => setSocketConnect(true));
     socket.on("typing", (typingUserId) => {
@@ -132,7 +130,6 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
 
   useEffect(() => {
     fetchMessages();
-    selectedChatCompare = selectedChat;
   }, [selectedChat]);
 
   useEffect(() => {
@@ -142,7 +139,7 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
         selectedChat._id !== newMsgR.chat._id
       ) {
         if (!notification.includes(newMsgR)) {
-          dispatch(dispatchNotification(newMsgR));
+          // dispatch(dispatchNotification(newMsgR));
         }
       } else {
         setAllMessages((prevMsgs) => [...prevMsgs, newMsgR]);

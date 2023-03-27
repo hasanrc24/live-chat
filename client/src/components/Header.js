@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import { IoNotificationsSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,11 +11,12 @@ import {
   chatSelector,
   dispatchNotification,
   dispatchSelectedChat,
-  removeNotificatin,
   removeNotification,
 } from "../redux/chatSlice";
+import io from "socket.io-client";
 
 const Header = ({ openModal, setOpenModal }) => {
+  let socket = io.connect("http://localhost:5000");
   const [showMenu, setShowMenu] = useState(false);
   const [showNotif, setShoeNotif] = useState(false);
 
@@ -24,7 +25,7 @@ const Header = ({ openModal, setOpenModal }) => {
 
   const { user } = useSelector(userSelector);
   const { toggle } = useSelector(toggleSelector);
-  const { notification } = useSelector(chatSelector);
+  const { notification, selectedChat } = useSelector(chatSelector);
 
   const handleLogout = () => {
     dispatch(addUserInfo({}));
@@ -39,6 +40,32 @@ const Header = ({ openModal, setOpenModal }) => {
     dispatch(dispatchSelectedChat(chat));
     dispatch(removeNotification(chat));
   };
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+  const hasDispatchedNotificationRef = useRef(false);
+
+  useEffect(() => {
+    socket.emit("setup", userInfo);
+    socket.on("message_received", (newMsgR) => {
+      const notificationExists = notification.every(
+        (notificationMsg) => notificationMsg.chat._id !== newMsgR.chat._id
+      );
+      if (
+        Object.keys(selectedChat).length === 0 ||
+        selectedChat._id !== newMsgR.chat._id
+      ) {
+        if (notificationExists) {
+          dispatch(dispatchNotification(newMsgR));
+          hasDispatchedNotificationRef.current = true;
+        }
+      }
+    });
+    return () => {
+      socket.off("message_received");
+      hasDispatchedNotificationRef.current = false;
+    };
+  }, [dispatch, notification, selectedChat]);
+
   return (
     <div className="bg-brand text-white p-4 flex justify-between items-center z-50">
       <div

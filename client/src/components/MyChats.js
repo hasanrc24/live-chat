@@ -1,7 +1,11 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getSender } from "../config/config";
-import { chatSelector, dispatchSelectedChat } from "../redux/chatSlice";
+import {
+  chatSelector,
+  dispatchSelectedChat,
+  removeNotification,
+} from "../redux/chatSlice";
 import { toggleRight } from "../redux/toggleSlice";
 import { userSelector } from "../redux/userSlice";
 
@@ -13,6 +17,10 @@ const MyChats = ({ chat }) => {
   const handleSelectChat = () => {
     dispatch(toggleRight());
     dispatch(dispatchSelectedChat(chat));
+    let found = notification.find((noti) => noti.chat._id === chat._id);
+    if (found) {
+      dispatch(removeNotification(found.chat));
+    }
   };
   return (
     <div
