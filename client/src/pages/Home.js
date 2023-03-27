@@ -7,6 +7,8 @@ import { addUserInfo } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
 import { toggleSelector } from "../redux/toggleSlice";
 import { toast, Toaster } from "react-hot-toast";
+import { chatSelector, dispatchNotification } from "../redux/chatSlice";
+import { io } from "socket.io-client";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -19,6 +21,10 @@ const Home = () => {
   const [chatOptionModal, setChatOptionModal] = useState(false);
 
   const { toggle } = useSelector(toggleSelector);
+  const { selectedChat, notification } = useSelector(chatSelector);
+
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  let socket;
 
   useEffect(() => {
     if (localStorage.getItem("userInfo")) {
@@ -28,6 +34,23 @@ const Home = () => {
       navigate("/login");
     }
   }, []);
+
+  const ENDPOINT = "http://localhost:5000";
+  socket = io.connect(ENDPOINT);
+  useEffect(() => {
+    socket.emit("setup", userInfo);
+    socket.on("message_received", (newMsgR) => {
+      if (
+        Object.keys(selectedChat).length === 0 ||
+        selectedChat._id !== newMsgR.chat._id
+      ) {
+        if (!notification.includes(newMsgR)) {
+          dispatch(dispatchNotification(newMsgR));
+        }
+      }
+    });
+    console.log(notification);
+  }, [socket]);
   return (
     <div className="bg-brand-bg h-screen flex justify-center items-center">
       <div className="h-[90vh] w-[90vw] md:h-[80vh] md:w-[70vw] bg-white rounded-xl shadow-xl overflow-hidden">

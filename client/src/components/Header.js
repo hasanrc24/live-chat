@@ -16,6 +16,7 @@ const Header = ({ openModal, setOpenModal }) => {
 
   const { user } = useSelector(userSelector);
   const { toggle } = useSelector(toggleSelector);
+  const { notification } = useSelector(chatSelector);
 
   const handleLogout = () => {
     dispatch(addUserInfo({}));

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useSelector } from "react-redux";
-import { chatSelector } from "../../redux/chatSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { chatSelector, dispatchNotification } from "../../redux/chatSlice";
 import { userSelector } from "../../redux/userSlice";
 import Message from "./Message";
 import ScrollableFeed from "react-scrollable-feed";
@@ -19,7 +19,8 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
   const [isTyping, setIsTyping] = useState(false);
 
   const { user } = useSelector(userSelector);
-  const { selectedChat } = useSelector(chatSelector);
+  const { selectedChat, notification } = useSelector(chatSelector);
+  const dispatch = useDispatch();
 
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
@@ -121,18 +122,16 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
   }, []);
 
   useEffect(() => {
-    fetchMessages();
     selectedChatCompare = selectedChat;
+    fetchMessages();
   }, [selectedChat]);
 
   useEffect(() => {
     socket.on("message_received", (newMsgR) => {
       if (
-        !selectedChatCompare ||
-        selectedChatCompare._id !== newMsgR.chat._id
+        Object.keys(selectedChatCompare).length !== 0 ||
+        selectedChatCompare._id === newMsgR.chat._id
       ) {
-        // console.log("Other user");
-      } else {
         setAllMessages((prevMsgs) => [...prevMsgs, newMsgR]);
       }
     });
@@ -157,14 +156,10 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
         )}
         {isTyping && (
           <>
-            {/* <p className="text-start px-5 py-3">Typing...</p> */}
-            {/* <div className="mr-auto"> */}
-            <Lottie
-              animationData={typingAnimation}
-              loop={true}
-              style={{ marginRight: "auto" }}
-            />
-            {/* </div> */}
+            <div className="flex-grow"></div>
+            <div className="mr-auto">
+              <Lottie animationData={typingAnimation} loop={true} />
+            </div>
           </>
         )}
       </ScrollableFeed>

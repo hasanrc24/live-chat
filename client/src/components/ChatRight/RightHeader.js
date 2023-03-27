@@ -19,8 +19,8 @@ const RightHeader = ({
       <div className="flex gap-2">
         <img
           src={
-            !selectedChat.isGroupChat
-              ? getSender(user, selectedChat.users).picture
+            !selectedChat?.isGroupChat
+              ? getSender(user, selectedChat?.users).picture
               : "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
           }
           alt="img"
@@ -28,9 +28,9 @@ const RightHeader = ({
         />
         <div>
           <p className="font-semibold">
-            {selectedChat.isGroupChat
-              ? selectedChat.chatName
-              : getSender(user, selectedChat.users).name}
+            {selectedChat?.isGroupChat
+              ? selectedChat?.chatName
+              : getSender(user, selectedChat?.users).name}
           </p>
           <span className="text-xs -mt-1 absolute">Online</span>
         </div>

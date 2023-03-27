@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   selectedChat: {},
   chats: [],
+  notification: [],
 };
 
 export const chatSlice = createSlice({
@@ -15,9 +16,13 @@ export const chatSlice = createSlice({
     dispatchChats: (state, action) => {
       state.chats = action.payload;
     },
+    dispatchNotification: (state, action) => {
+      state.notification = [action.payload, ...state.notification];
+    },
   },
 });
 
 export const chatSelector = (state) => state.chatReducer;
-export const { dispatchSelectedChat, dispatchChats } = chatSlice.actions;
+export const { dispatchSelectedChat, dispatchChats, dispatchNotification } =
+  chatSlice.actions;
 export default chatSlice.reducer;
