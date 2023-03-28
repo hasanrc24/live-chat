@@ -3,10 +3,13 @@ import ChatLeft from "../components/ChatLeft";
 import ChatRight from "../components/ChatRight";
 import Header from "../components/Header";
 import { useDispatch, useSelector } from "react-redux";
-import { addUserInfo } from "../redux/userSlice";
+import { addUserInfo, userSelector } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
 import { toggleSelector } from "../redux/toggleSlice";
 import { toast, Toaster } from "react-hot-toast";
+import io from "socket.io-client";
+import { chatSelector } from "../redux/chatSlice";
+import { getSender } from "../config/config";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -17,8 +20,12 @@ const Home = () => {
 
   const [openModal, setOpenModal] = useState(false);
   const [chatOptionModal, setChatOptionModal] = useState(false);
+  // const [onlineUsers, setOnlineUsers] = useState([]);
+  // const [isOnline, setIsOnline] = useState(false);
 
   const { toggle } = useSelector(toggleSelector);
+  // const { user } = useSelector(userSelector);
+  // const { selectedChat } = useSelector(chatSelector);
 
   useEffect(() => {
     if (localStorage.getItem("userInfo")) {
@@ -28,6 +35,28 @@ const Home = () => {
       navigate("/login");
     }
   }, []);
+
+  // const localUser = JSON.parse(localStorage.getItem("userInfo"));
+
+  // if (selectedChat) {
+  //   const chatUser = getSender(user, selectedChat?.users);
+  //   console.log(chatUser);
+  // }
+
+  // const ENDPOINT = "http://localhost:5000";
+  // let socket = io.connect(ENDPOINT);
+
+  // useEffect(() => {
+  //   socket.emit("user_connect", localUser._id);
+  //   socket.off("user_online").on("user_online", (users) => {
+  //     setOnlineUsers(users);
+  //   });
+  //   return () => {
+  //     socket.emit("user_disconnect", user._id);
+  //   };
+
+  //   // if(onlineUsers.includes())
+  // }, [selectedChat]);
 
   return (
     <div className="bg-brand-bg h-screen flex justify-center items-center">

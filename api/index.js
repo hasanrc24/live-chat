@@ -37,6 +37,8 @@ const io = new Server(server, {
   },
 });
 
+let onlineUsers = [];
+
 io.on("connection", (socket) => {
   socket.on("setup", (userData) => {
     socket.join(userData._id);
@@ -63,5 +65,23 @@ io.on("connection", (socket) => {
 
       socket.in(user._id).emit("message_received", newMsgR);
     });
+  });
+
+  socket.on("user_connect", (userId) => {
+    if (!onlineUsers.includes(userId)) {
+      onlineUsers.push(userId);
+    }
+    socket.emit("user_online", onlineUsers);
+  });
+
+  socket.on("user_disconnect", (userId) => {
+    if (onlineUsers.includes(userId)) {
+      onlineUsers = onlineUsers.filter((users) => users !== userId);
+    }
+    // socket.emit("user_offline", onlineUsers);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("User Disconnected");
   });
 });
