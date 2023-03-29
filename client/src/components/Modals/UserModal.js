@@ -34,7 +34,7 @@ const UserModal = ({ setOpenModal, notifyError, notifySuccess }) => {
 
     try {
       const res = await axios.put(
-        "/api/chat/rename",
+        `${process.env.REACT_APP_BASE_URL}/api/chat/rename`,
         {
           chatId: selectedChat._id,
           chatName,
@@ -68,7 +68,7 @@ const UserModal = ({ setOpenModal, notifyError, notifySuccess }) => {
     try {
       setLoading(true);
       const res = await axios.put(
-        "/api/chat/removeFromGroup",
+        `${process.env.REACT_APP_BASE_URL}/api/chat/removeFromGroup`,
         {
           chatId: selectedChat._id,
           userId,
@@ -109,7 +109,7 @@ const UserModal = ({ setOpenModal, notifyError, notifySuccess }) => {
     }
     try {
       const res = await axios.put(
-        "/api/chat/addToGroup",
+        `${process.env.REACT_APP_BASE_URL}/api/chat/addToGroup`,
         { chatId: selectedChat._id, userId: userDt._id },
         {
           headers: {
@@ -133,11 +133,14 @@ const UserModal = ({ setOpenModal, notifyError, notifySuccess }) => {
     debounce(async (value) => {
       setLoading(true);
       try {
-        const { data } = await axios.get(`/api/user?search=${value}`, {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        });
+        const { data } = await axios.get(
+          `${process.env.REACT_APP_BASE_URL}/api/user?search=${value}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
         setSearchData(data);
         setLoading(false);
       } catch (error) {
@@ -162,7 +165,7 @@ const UserModal = ({ setOpenModal, notifyError, notifySuccess }) => {
     setLoading(true);
     try {
       const res = await axios.put(
-        "/api/chat/removeFromGroup",
+        `${process.env.REACT_APP_BASE_URL}/api/chat/removeFromGroup`,
         {
           chatId: selectedChat._id,
           userId: user._id,

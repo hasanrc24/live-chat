@@ -16,7 +16,7 @@ import {
 import io from "socket.io-client";
 
 const Header = ({ openModal, setOpenModal }) => {
-  let socket = io.connect("http://localhost:5000");
+  let socket = io.connect(process.env.BASE_URL);
   const [showMenu, setShowMenu] = useState(false);
   const [showNotif, setShoeNotif] = useState(false);
 

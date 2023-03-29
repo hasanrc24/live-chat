@@ -54,7 +54,7 @@ const Register = () => {
 
         try {
           const { data } = await axios.post(
-            "/api/user",
+            `${process.env.REACT_APP_BASE_URL}/api/user`,
             { name, email, password, picture: picData.url.toString() },
             {
               headers: {

@@ -32,9 +32,6 @@ const server = app.listen(
 
 const io = new Server(server, {
   pingTimeout: 60000,
-  cors: {
-    origin: "http://localhost:3000",
-  },
 });
 
 let onlineUsers = [];
@@ -79,9 +76,5 @@ io.on("connection", (socket) => {
       onlineUsers = onlineUsers.filter((users) => users !== userId);
     }
     // socket.emit("user_offline", onlineUsers);
-  });
-
-  socket.on("disconnect", () => {
-    console.log("User Disconnected");
   });
 });

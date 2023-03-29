@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { formatTime, isLastMessage, isSameSender } from "../../config/config";
+import { formatTime } from "../../config/config";
 import { userSelector } from "../../redux/userSlice";
 
 const Message = ({ message, index }) => {

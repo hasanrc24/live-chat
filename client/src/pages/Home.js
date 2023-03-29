@@ -20,7 +20,6 @@ const Home = () => {
 
   const [openModal, setOpenModal] = useState(false);
   const [chatOptionModal, setChatOptionModal] = useState(false);
-  // const [onlineUsers, setOnlineUsers] = useState([]);
   const [isOnline, setIsOnline] = useState(false);
 
   const { toggle } = useSelector(toggleSelector);
@@ -28,7 +27,7 @@ const Home = () => {
   const { selectedChat } = useSelector(chatSelector);
 
   useEffect(() => {
-    if (localStorage.getItem("userInfo")) {
+    if (localStorage.getItem("userInfo") || Object.keys(user).length > 0) {
       const info = JSON.parse(localStorage.getItem("userInfo"));
       dispatch(addUserInfo(info));
     } else {
@@ -43,8 +42,7 @@ const Home = () => {
     console.log(chatUser);
   }
 
-  const ENDPOINT = "http://localhost:5000";
-  let socket = io.connect(ENDPOINT);
+  let socket = io.connect(process.env.BASE_URL);
 
   useEffect(() => {
     socket.emit("user_connect", localUser._id);

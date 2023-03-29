@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  chatSelector,
-  dispatchChats,
-  dispatchNotification,
-  dispatchSelectedChat,
-} from "../../redux/chatSlice";
+import { chatSelector, dispatchChats } from "../../redux/chatSlice";
 import { userSelector } from "../../redux/userSlice";
 import Message from "./Message";
 import ScrollableFeed from "react-scrollable-feed";
@@ -29,8 +24,7 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
 
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
-  const ENDPOINT = "http://localhost:5000";
-  let socket = io.connect(ENDPOINT);
+  let socket = io.connect(process.env.BASE_URL);
 
   const fetchMessages = async () => {
     if (!selectedChat) {
@@ -88,7 +82,7 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
     try {
       setMessageInput("");
       const res = await axios.post(
-        "/api/message",
+        `${process.env.REACT_APP_BASE_URL}/api/message`,
         {
           content: messageInput,
           chatId: selectedChat._id,

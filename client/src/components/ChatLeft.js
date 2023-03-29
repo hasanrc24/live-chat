@@ -23,17 +23,20 @@ const ChatLeft = ({ notifyError, notifySuccess }) => {
 
   const dispatch = useDispatch();
   const { user } = useSelector(userSelector);
-  const { chats, selectedChat } = useSelector(chatSelector);
+  const { chats } = useSelector(chatSelector);
   const localUser = JSON.parse(localStorage.getItem("userInfo"));
 
   const fetchUsers = useCallback(
     debounce(async (value) => {
       try {
-        const { data } = await axios.get(`/api/user?search=${value}`, {
-          headers: {
-            Authorization: `Bearer ${localUser.token}`,
-          },
-        });
+        const { data } = await axios.get(
+          `${process.env.REACT_APP_BASE_URL}/api/user?search=${value}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localUser.token}`,
+            },
+          }
+        );
         setSearchData(data);
       } catch (error) {
         console.log(error);
@@ -56,7 +59,7 @@ const ChatLeft = ({ notifyError, notifySuccess }) => {
     dispatch(toggleRight());
     try {
       const { data } = await axios.post(
-        "/api/chat",
+        `${process.env.REACT_APP_BASE_URL}/api/chat`,
         { userId },
         {
           headers: {
@@ -79,11 +82,14 @@ const ChatLeft = ({ notifyError, notifySuccess }) => {
   const fetchChats = async (token) => {
     setLoading(true);
     try {
-      const { data } = await axios.get("/api/chat", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/api/chat`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setLoading(false);
       setAllChats(data);
       dispatch(dispatchChats(data));

@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { getSender } from "../../config/config";
 import { SlOptions } from "react-icons/sl";
 import UserModal from "../Modals/UserModal";
 import { useSelector } from "react-redux";
 import { chatSelector } from "../../redux/chatSlice";
 import { userSelector } from "../../redux/userSlice";
-import io from "socket.io-client";
 
 const RightHeader = ({
   openModal,

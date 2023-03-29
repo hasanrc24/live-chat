@@ -31,11 +31,14 @@ const GroupChatModal = ({
     setSearch(query);
 
     try {
-      const { data } = await axios.get(`/api/user?search=${search}`, {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/api/user?search=${search}`,
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
 
       const selectedUserIds = selectedUsers.map((user) => user._id);
 
@@ -77,7 +80,7 @@ const GroupChatModal = ({
 
     try {
       const res = await axios.post(
-        "/api/chat/group",
+        `${process.env.REACT_APP_BASE_URL}/api/chat/group`,
         {
           name: groupChatName,
           users: JSON.stringify(selectedUsers.map((us) => us._id)),
