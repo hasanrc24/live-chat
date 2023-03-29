@@ -24,7 +24,7 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
 
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
-  let socket = io.connect(process.env.BASE_URL);
+  let socket = io.connect(process.env.REACT_APP_BASE_URL);
 
   const fetchMessages = async () => {
     if (!selectedChat) {

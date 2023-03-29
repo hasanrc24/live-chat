@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getSender } from "../config/config";
 import {
@@ -12,7 +12,9 @@ import { userSelector } from "../redux/userSlice";
 const MyChats = ({ chat }) => {
   const dispatch = useDispatch();
   const { selectedChat, notification } = useSelector(chatSelector);
-  const { user } = useSelector(userSelector);
+  const { user, onlineUsers } = useSelector(userSelector);
+
+  const [isOnline, setIsOnline] = useState(false);
 
   const handleSelectChat = () => {
     dispatch(toggleRight());
@@ -22,6 +24,15 @@ const MyChats = ({ chat }) => {
       dispatch(removeNotification(found.chat));
     }
   };
+
+  useEffect(() => {
+    const receiver = getSender(user, chat.users)._id;
+    if (onlineUsers.includes(receiver)) {
+      setIsOnline(true);
+    } else {
+      setIsOnline(false);
+    }
+  }, [selectedChat]);
   return (
     <div
       onClick={handleSelectChat}
@@ -40,6 +51,11 @@ const MyChats = ({ chat }) => {
           className="object-cover"
         />
       </div>
+      {isOnline ? (
+        <span className="h-3 w-3 rounded-full border-2 border-white bg-green-400 -ml-[1.3rem] mt-[1.5rem]"></span>
+      ) : (
+        <span className="h-3 w-3 rounded-full border-2 border-white bg-slate-500 -ml-[1.3rem] mt-[1.5rem]"></span>
+      )}
       <div className="text-chat-text">
         <p className="font-semibold">
           {chat.isGroupChat ? chat.chatName : getSender(user, chat.users).name}

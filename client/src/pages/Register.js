@@ -41,21 +41,23 @@ const Register = () => {
       formData.append("upload_preset", "live-chat");
       formData.append("cloud_name", "dnqvwwxzv");
       try {
-        const res = await fetch(
-          "https://api.cloudinary.com/v1_1/dnqvwwxzv/image/upload",
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
-        const picData = await res.json();
-        setPicture(picData.url.toString());
+        if (file) {
+          const res = await fetch(
+            "https://api.cloudinary.com/v1_1/dnqvwwxzv/image/upload",
+            {
+              method: "POST",
+              body: formData,
+            }
+          );
+          const picData = await res.json();
+          setPicture(picData?.url?.toString());
+        }
         setLoading(false);
 
         try {
           const { data } = await axios.post(
             `${process.env.REACT_APP_BASE_URL}/api/user`,
-            { name, email, password, picture: picData.url.toString() },
+            { name, email, password, picture },
             {
               headers: {
                 "Content-Type": "application/json",

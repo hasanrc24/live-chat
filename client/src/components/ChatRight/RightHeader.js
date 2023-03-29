@@ -28,8 +28,10 @@ const RightHeader = ({
           alt="img"
           className="h-10 w-10 rounded-full"
         />
-        {isOnline && (
-          <span className="h-3 w-3 rounded-full bg-green-400 -ml-[1.1rem] mt-[1.6rem]"></span>
+        {isOnline ? (
+          <span className="h-3 w-3 rounded-full bg-green-400 border-2 border-white -ml-[1.1rem] mt-[1.6rem]"></span>
+        ) : (
+          <span className="h-3 w-3 rounded-full bg-slate-500 border-2 border-white -ml-[1.1rem] mt-[1.6rem]"></span>
         )}
         <div>
           <p className="font-semibold">

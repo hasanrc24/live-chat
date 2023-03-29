@@ -42,7 +42,7 @@ const Home = () => {
     console.log(chatUser);
   }
 
-  let socket = io.connect(process.env.BASE_URL);
+  let socket = io.connect(process.env.REACT_APP_BASE_URL);
 
   useEffect(() => {
     socket.emit("user_connect", localUser._id);
