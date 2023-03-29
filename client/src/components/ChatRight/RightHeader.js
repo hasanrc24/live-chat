@@ -12,32 +12,10 @@ const RightHeader = ({
   setOpenModal,
   notifyError,
   notifySuccess,
+  isOnline,
 }) => {
   const { user } = useSelector(userSelector);
   const { selectedChat } = useSelector(chatSelector);
-  const [onlineUsers, setOnlineUsers] = useState([]);
-  const [isOnline, setIsOnline] = useState(false);
-
-  const localUser = JSON.parse(localStorage.getItem("userInfo"));
-
-  const ENDPOINT = "http://localhost:5000";
-  let socket = io.connect(ENDPOINT);
-
-  useEffect(() => {
-    socket.emit("user_connect", localUser._id);
-    socket.off("user_online").on("user_online", (users) => {
-      setOnlineUsers(users);
-      const chatUser = getSender(user, selectedChat?.users);
-      if (onlineUsers.includes(chatUser._id)) {
-        setIsOnline(true);
-      }
-    });
-    return () => {
-      socket.emit("user_disconnect", user._id);
-    };
-  }, [selectedChat]);
-
-  console.log(onlineUsers);
 
   return (
     <div className="flex justify-between items-center px-3 py-2 bg-white relative z-20">
@@ -51,6 +29,9 @@ const RightHeader = ({
           alt="img"
           className="h-10 w-10 rounded-full"
         />
+        {isOnline && (
+          <span className="h-3 w-3 rounded-full bg-green-400 -ml-[1.1rem] mt-[1.6rem]"></span>
+        )}
         <div>
           <p className="font-semibold">
             {selectedChat?.isGroupChat
