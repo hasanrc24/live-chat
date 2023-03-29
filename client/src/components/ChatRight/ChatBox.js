@@ -153,9 +153,19 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
         {loading ? (
           <p className="flex justify-center items-center">Loading...</p>
         ) : allMessages.length === 0 ? (
-          <p className="flex justify-center items-center">
-            No messages to display.
-          </p>
+          <>
+            <p className="flex justify-center items-center">
+              No messages to display.
+            </p>
+            {isTyping && (
+              <>
+                <div className="flex-grow"></div>
+                <div className="mr-auto">
+                  <Lottie animationData={typingAnimation} loop={true} />
+                </div>
+              </>
+            )}
+          </>
         ) : (
           <>
             <div className="flex-grow"></div>

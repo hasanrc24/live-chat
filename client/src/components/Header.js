@@ -30,6 +30,7 @@ const Header = ({ openModal, setOpenModal }) => {
   const handleLogout = () => {
     dispatch(addUserInfo({}));
     dispatch(dispatchSelectedChat({}));
+    dispatch(toggleLeft());
     localStorage.removeItem("userInfo");
     navigate("/login");
   };

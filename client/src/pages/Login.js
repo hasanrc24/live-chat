@@ -42,6 +42,10 @@ const Login = () => {
       );
     }
   };
+  const handleDemoLogin = () => {
+    setEmail("guest@gmail.com");
+    setPassword("guest1234");
+  };
   return (
     <div className="bg-brand-bg h-screen flex justify-center items-center">
       <div className="bg-white rounded-xl p-8 shadow-xl">
@@ -72,7 +76,10 @@ const Login = () => {
             value="Login"
             className=" mt-4 px-8 py-2 font-semibold cursor-pointer text-white bg-brand/90 rounded-lg m-auto"
           />
-          <button className="border-2 border-brand rounded-lg m-auto mt-3 py-2 px-4 hover:bg-brand  hover:text-white transition-all font-semibold">
+          <button
+            onClick={handleDemoLogin}
+            className="border-2 border-brand rounded-lg m-auto mt-3 py-2 px-4 hover:bg-brand  hover:text-white transition-all font-semibold"
+          >
             Demo Login
           </button>
         </form>
