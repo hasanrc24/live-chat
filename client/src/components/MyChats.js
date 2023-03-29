@@ -44,11 +44,11 @@ const MyChats = ({ chat }) => {
         <p className="font-semibold">
           {chat.isGroupChat ? chat.chatName : getSender(user, chat.users).name}
         </p>
-        <p className="text-sm">
+        {/* <p className="text-sm">
           {chat?.latestMessage?.content?.length > 50
             ? chat.latestMessage.content.substring(0, 30) + "..."
             : chat?.latestMessage?.content}
-        </p>
+        </p> */}
       </div>
     </div>
   );
