@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ChatLeft from "../components/ChatLeft";
 import ChatRight from "../components/ChatRight";
 import Header from "../components/Header";
@@ -37,12 +37,8 @@ const Home = () => {
 
   const localUser = JSON.parse(localStorage.getItem("userInfo"));
 
-  if (Object.keys(selectedChat) > 0) {
-    const chatUser = getSender(user, selectedChat?.users);
-    console.log(chatUser);
-  }
-
   let socket = io.connect(process.env.REACT_APP_BASE_URL);
+  // let socket = useMemo(() => io.connect(process.env.REACT_APP_BASE_URL), []);
 
   useEffect(() => {
     socket.emit("user_connect", localUser._id);
@@ -60,6 +56,7 @@ const Home = () => {
         }
       }
     });
+    console.log("socket from home");
     return () => {
       socket.emit("user_disconnect", user._id);
     };

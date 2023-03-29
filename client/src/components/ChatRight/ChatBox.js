@@ -139,6 +139,10 @@ const ChatBox = ({ notifyError, notifySuccess }) => {
         setAllMessages((prevMsgs) => [...prevMsgs, newMsgR]);
       }
     });
+    console.log("Socket from chatbox");
+    return () => {
+      socket.off("message_received", (newMsgR) => {});
+    };
   }, [socket]);
 
   return (
