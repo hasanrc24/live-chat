@@ -21,9 +21,16 @@ const RightHeader = ({
   let socket = io.connect(process.env.REACT_APP_BASE_URL);
 
   useEffect(() => {
+    socket.emit("user_connect", user._id);
+    return () => {
+      socket.emit("user_disconnect", user._id);
+    };
+  }, []);
+  useEffect(() => {
     socket.on("user_online", (users) => {
       dispatch(onlineUserList(users));
       const chatUser = getSender(user, selectedChat?.users)._id;
+      console.log(getSender(user, selectedChat.users).name, isOnline);
       if (users.includes(chatUser)) {
         setIsOnline(true);
       } else {
@@ -33,7 +40,7 @@ const RightHeader = ({
     return () => {
       socket.off("user_online");
     };
-  }, [socket]);
+  }, []);
 
   return (
     <div className="flex justify-between items-center px-3 py-2 bg-white relative z-20">

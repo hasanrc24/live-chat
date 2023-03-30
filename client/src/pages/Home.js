@@ -33,10 +33,10 @@ const Home = () => {
     } else {
       navigate("/login");
     }
-    socket.emit("user_connect", localUser._id);
-    return () => {
-      socket.emit("user_disconnect", localUser._id);
-    };
+    // socket.emit("user_connect", localUser._id);
+    // return () => {
+    //   socket.emit("user_disconnect", localUser._id);
+    // };
   }, []);
 
   return (

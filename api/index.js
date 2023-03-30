@@ -72,7 +72,7 @@ io.on("connection", (socket) => {
     if (!onlineUsers.includes(userId)) {
       onlineUsers.push(userId);
     }
-    socket.broadcast.emit("user_online", onlineUsers);
+    io.emit("user_online", onlineUsers);
   });
 
   socket.on("user_disconnect", (userId) => {
@@ -80,7 +80,7 @@ io.on("connection", (socket) => {
       // onlineUsers = onlineUsers.filter((users) => users !== userId);
       onlineUsers.splice(onlineUsers.indexOf(userId), 1);
     }
-    socket.broadcast.emit("user_online", onlineUsers);
+    io.emit("user_online", onlineUsers);
   });
   socket.on("disconnect", () => {
     // socket.broadcast.emit("user_online", onlineUsers);

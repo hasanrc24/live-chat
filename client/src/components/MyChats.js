@@ -29,10 +29,18 @@ const MyChats = ({ chat }) => {
   };
 
   useEffect(() => {
+    socket.emit("user_connect", user._id);
+    return () => {
+      socket.emit("user_disconnect", user._id);
+    };
+  }, []);
+
+  useEffect(() => {
     socket.on("user_online", (users) => {
-      console.log(users);
+      // console.log(users);
       dispatch(onlineUserList(users));
       const receiver = getSender(user, chat.users)._id;
+      console.log(getSender(user, chat.users).name, isOnline);
       if (users.includes(receiver)) {
         setIsOnline(true);
       } else {
@@ -42,7 +50,7 @@ const MyChats = ({ chat }) => {
     return () => {
       socket.off("user_online");
     };
-  }, [socket]);
+  }, []);
 
   return (
     <div
