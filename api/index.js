@@ -68,19 +68,22 @@ io.on("connection", (socket) => {
   });
 
   socket.on("user_connect", (userId) => {
+    console.log("User", userId);
     if (!onlineUsers.includes(userId)) {
       onlineUsers.push(userId);
     }
-    socket.emit("user_online", onlineUsers);
+    socket.broadcast.emit("user_online", onlineUsers);
   });
 
   socket.on("user_disconnect", (userId) => {
     if (onlineUsers.includes(userId)) {
-      onlineUsers = onlineUsers.filter((users) => users !== userId);
+      // onlineUsers = onlineUsers.filter((users) => users !== userId);
+      onlineUsers.splice(onlineUsers.indexOf(userId), 1);
     }
-    // socket.emit("user_offline", onlineUsers);
+    socket.broadcast.emit("user_online", onlineUsers);
   });
   socket.on("disconnect", () => {
-    console.log("Disconnected");
+    // socket.broadcast.emit("user_online", onlineUsers);
+    console.log("disconnected");
   });
 });

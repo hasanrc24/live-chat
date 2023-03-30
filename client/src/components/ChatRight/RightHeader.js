@@ -1,20 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { getSender } from "../../config/config";
 import { SlOptions } from "react-icons/sl";
 import UserModal from "../Modals/UserModal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { chatSelector } from "../../redux/chatSlice";
-import { userSelector } from "../../redux/userSlice";
+import { onlineUserList, userSelector } from "../../redux/userSlice";
+import io from "socket.io-client";
 
 const RightHeader = ({
   openModal,
   setOpenModal,
   notifyError,
   notifySuccess,
-  isOnline,
 }) => {
-  const { user } = useSelector(userSelector);
+  const [isOnline, setIsOnline] = useState(false);
+  const { user, onlineUsers } = useSelector(userSelector);
   const { selectedChat } = useSelector(chatSelector);
+  const dispatch = useDispatch();
+
+  let socket = io.connect(process.env.REACT_APP_BASE_URL);
+
+  useEffect(() => {
+    socket.on("user_online", (users) => {
+      dispatch(onlineUserList(users));
+      const chatUser = getSender(user, selectedChat?.users)._id;
+      if (users.includes(chatUser)) {
+        setIsOnline(true);
+      } else {
+        setIsOnline(false);
+      }
+    });
+    return () => {
+      socket.off("user_online");
+    };
+  }, [socket]);
 
   return (
     <div className="flex justify-between items-center px-3 py-2 bg-white relative z-20">

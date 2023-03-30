@@ -9,7 +9,6 @@ const ChatRight = ({
   notifySuccess,
   chatOptionModal,
   setChatOptionModal,
-  isOnline,
 }) => {
   const { selectedChat } = useSelector(chatSelector);
 
@@ -22,7 +21,6 @@ const ChatRight = ({
             setOpenModal={setChatOptionModal}
             notifyError={notifyError}
             notifySuccess={notifySuccess}
-            isOnline={isOnline}
           />
           <ChatBox notifyError={notifyError} notifySuccess={notifySuccess} />
         </div>

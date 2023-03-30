@@ -7,12 +7,15 @@ import {
   removeNotification,
 } from "../redux/chatSlice";
 import { toggleRight } from "../redux/toggleSlice";
-import { userSelector } from "../redux/userSlice";
+import { onlineUserList, userSelector } from "../redux/userSlice";
+import io from "socket.io-client";
 
 const MyChats = ({ chat }) => {
   const dispatch = useDispatch();
   const { selectedChat, notification } = useSelector(chatSelector);
   const { user, onlineUsers } = useSelector(userSelector);
+
+  let socket = io.connect(process.env.REACT_APP_BASE_URL);
 
   const [isOnline, setIsOnline] = useState(false);
 
@@ -26,13 +29,21 @@ const MyChats = ({ chat }) => {
   };
 
   useEffect(() => {
-    const receiver = getSender(user, chat.users)._id;
-    if (onlineUsers.includes(receiver)) {
-      setIsOnline(true);
-    } else {
-      setIsOnline(false);
-    }
-  }, [selectedChat]);
+    socket.on("user_online", (users) => {
+      console.log(users);
+      dispatch(onlineUserList(users));
+      const receiver = getSender(user, chat.users)._id;
+      if (users.includes(receiver)) {
+        setIsOnline(true);
+      } else {
+        setIsOnline(false);
+      }
+    });
+    return () => {
+      socket.off("user_online");
+    };
+  }, [socket]);
+
   return (
     <div
       onClick={handleSelectChat}

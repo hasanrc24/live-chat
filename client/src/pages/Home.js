@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import ChatLeft from "../components/ChatLeft";
 import ChatRight from "../components/ChatRight";
 import Header from "../components/Header";
@@ -20,47 +20,24 @@ const Home = () => {
 
   const [openModal, setOpenModal] = useState(false);
   const [chatOptionModal, setChatOptionModal] = useState(false);
-  const [isOnline, setIsOnline] = useState(false);
 
   const { toggle } = useSelector(toggleSelector);
-  const { user, onlineUsers } = useSelector(userSelector);
-  const { selectedChat } = useSelector(chatSelector);
-
-  useEffect(() => {
-    if (localStorage.getItem("userInfo") || Object.keys(user).length > 0) {
-      const info = JSON.parse(localStorage.getItem("userInfo"));
-      dispatch(addUserInfo(info));
-    } else {
-      navigate("/login");
-    }
-  }, []);
+  const { user } = useSelector(userSelector);
+  let socket = io.connect(process.env.REACT_APP_BASE_URL);
 
   const localUser = JSON.parse(localStorage.getItem("userInfo"));
 
-  let socket = io.connect(process.env.REACT_APP_BASE_URL);
-  // let socket = useMemo(() => io.connect(process.env.REACT_APP_BASE_URL), []);
-
   useEffect(() => {
+    if (localStorage.getItem("userInfo") || Object.keys(user).length > 0) {
+      dispatch(addUserInfo(localUser));
+    } else {
+      navigate("/login");
+    }
     socket.emit("user_connect", localUser._id);
-    socket.off("user_online").on("user_online", (users) => {
-      dispatch(onlineUserList(users));
-      if (Object.keys(selectedChat).length > 0) {
-        const chatUser = getSender(user, selectedChat?.users);
-        if (
-          selectedChat.users.includes(chatUser) &&
-          onlineUsers.includes(chatUser._id)
-        ) {
-          setIsOnline(true);
-        } else {
-          setIsOnline(false);
-        }
-      }
-    });
-    console.log("socket from home");
     return () => {
-      socket.emit("user_disconnect", user._id);
+      socket.emit("user_disconnect", localUser._id);
     };
-  }, [selectedChat]);
+  }, []);
 
   return (
     <div className="bg-brand-bg h-screen flex justify-center items-center">
@@ -84,7 +61,6 @@ const Home = () => {
               notifySuccess={notifySuccess}
               chatOptionModal={chatOptionModal}
               setChatOptionModal={setChatOptionModal}
-              isOnline={isOnline}
             />
           </div>
         </div>
