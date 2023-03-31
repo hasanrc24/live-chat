@@ -10,7 +10,6 @@ export function SocketProvider({ children }) {
 
   const handleUserOnline = useCallback((users) => {
     setOnline(users);
-    console.log(users);
   }, []);
 
   useEffect(() => {
