@@ -8,8 +8,6 @@ import { useNavigate } from "react-router-dom";
 import { toggleSelector } from "../redux/toggleSlice";
 import { toast, Toaster } from "react-hot-toast";
 import io from "socket.io-client";
-import { chatSelector } from "../redux/chatSlice";
-import { getSender } from "../config/config";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -33,10 +31,10 @@ const Home = () => {
     } else {
       navigate("/login");
     }
-    // socket.emit("user_connect", localUser._id);
-    // return () => {
-    //   socket.emit("user_disconnect", localUser._id);
-    // };
+    socket.emit("user_connect", localUser._id);
+    return () => {
+      socket.emit("user_disconnect", localUser._id);
+    };
   }, []);
 
   return (

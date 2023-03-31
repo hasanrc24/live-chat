@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { getSender } from "../../config/config";
 import { SlOptions } from "react-icons/sl";
 import UserModal from "../Modals/UserModal";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { chatSelector } from "../../redux/chatSlice";
-import { onlineUserList, userSelector } from "../../redux/userSlice";
-import io from "socket.io-client";
+import { userSelector } from "../../redux/userSlice";
+import { SocketContext } from "../../Context/SocketContext";
 
 const RightHeader = ({
   openModal,
@@ -14,34 +14,15 @@ const RightHeader = ({
   notifySuccess,
 }) => {
   const [isOnline, setIsOnline] = useState(false);
-  const { user, onlineUsers } = useSelector(userSelector);
+  const { user } = useSelector(userSelector);
   const { selectedChat } = useSelector(chatSelector);
-  const dispatch = useDispatch();
 
-  let socket = io.connect(process.env.REACT_APP_BASE_URL);
+  const data = useContext(SocketContext);
 
   useEffect(() => {
-    socket.emit("user_connect", user._id);
-    return () => {
-      socket.emit("user_disconnect", user._id);
-    };
-  }, []);
-  useEffect(() => {
-    socket.on("user_online", (users) => {
-      dispatch(onlineUserList(users));
-      const chatUser = getSender(user, selectedChat?.users)._id;
-      console.log(getSender(user, selectedChat.users).name, isOnline);
-      if (users.includes(chatUser)) {
-        setIsOnline(true);
-      } else {
-        setIsOnline(false);
-      }
-    });
-    return () => {
-      socket.off("user_online");
-    };
-  }, []);
-
+    const receiver = getSender(user, selectedChat.users)._id;
+    setIsOnline(data.includes(receiver));
+  }, [data]);
   return (
     <div className="flex justify-between items-center px-3 py-2 bg-white relative z-20">
       <div className="flex gap-2">
