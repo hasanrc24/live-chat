@@ -33,7 +33,7 @@ const server = app.listen(
 const io = new Server(server, {
   pingTimeout: 60000,
   cors: {
-    origin: "https://live-chat-webapp.vercel.app",
+    origin: "*",
   },
 });
 
